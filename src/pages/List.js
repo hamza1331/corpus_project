@@ -1,43 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Styles/Home.css";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Bar from "../components/Bar";
 import { useNavigate } from "react-router-dom";
-
+import { url } from "../components/Variable";
+import { useLocation } from "react-router-dom";
 export default function Home() {
   const navigation = useNavigate();
-  const url='https://ae92-185-202-239-227.ngrok.io'
-  const [Word,setWord] = useState('');
-  const Concord = async (e) => {
-    // setIsLoading(true)
-    fetch(`${url}/corpus/searchConcordance`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        word: Word,
-        criteria:"all",
-        // LN:
-      })
-    }).then(res => res.json())
-      .then((response) => {
-
-        console.log('Data received search word --->', response);
-        // after
+  const [Word, setWord] = useState('');
+  const [data, setData] = useState(null)
+  useEffect(() => {
+    getUDWords()
+  }, [])
+  const getUDWords = async () => {
+    fetch(`${url}/corpus/getUdWords`)
+      .then(res => res.json())
+      .then(response => {
         if (response.message === 'Success') {
-          // setIsLoading(false)
-         navigation('/Sresult' ,{state: {rehman : response.doc}})
-         
-          // setData(response.doc);
+          console.log('response--->', response.doc)
+          setData(response.doc)
         }
-
       })
-      .catch((error) =>{
-        console.log(error);
-      });
   }
   return (
     <div>
@@ -79,48 +63,13 @@ export default function Home() {
           <div className="row">
             <div className="col-md-12 col-sm-12 p-5 ">
               <div className="border border-2 p-2 border-success">
-                <h5 className="p-3 justify-content-center d-flex">List:</h5>
+                <h5 className="p-3 justify-content-center d-flex">Urduized Words</h5>
                 <Table>
-                  <Thead>
-                    <Tr>
-                      <Th>Event</Th>
-                      <Th>Date</Th>
-                      <Th>Location</Th>
-                      <Th>abc</Th>
-                      <Th>xyz</Th>
-                      <Th>bhi</Th>
-                      <Th>adc</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>Tablescon</Td>
-                      <Td>9 April 2019</Td>
-                      <Td>East Annex</Td>
-                      <Td>Tablescon</Td>
-                      <Td>9 April 2019</Td>
-                      <Td>East Annex</Td>
-                      <Td>Tablescon</Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Capstone Data</Td>
-                      <Td>19 May 2019</Td>
-                      <Td>205 Gorgas</Td>
-                      <Td>Tablescon</Td>
-                      <Td>9 April 2019</Td>
-                      <Td>East Annex</Td>
-                      <Td>Tablescon</Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Tuscaloosa D3</Td>
-                      <Td>29 June 2019</Td>
-                      <Td>Github</Td>
-                      <Td>Tablescon</Td>
-                      <Td>9 April 2019</Td>
-                      <Td>East Annex</Td>
-                      <Td>Tablescon</Td>
-                    </Tr>
-                  </Tbody>
+                  {data !== null && <Tbody>
+                    {data!==null && Object.values(data).map((value) => <Tr>
+                      {value.map((data) => <Td  style={{fontWeight:"bold"}}>{data}</Td>)}
+                    </Tr>)}
+                  </Tbody>}
                 </Table>
               </div>
             </div>

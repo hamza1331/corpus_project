@@ -27,7 +27,7 @@ export default function Home() {
         // after
         if (response.message === 'Success') {
           // setIsLoading(false)
-         navigation('/Sresult' ,{state: {rehman : response.doc,Word:Word}})
+         navigation('/Sresult' ,{state: {rehman : response.doc,Word:Word,criteria:"all"}})
          
           // setData(response.doc);
         }

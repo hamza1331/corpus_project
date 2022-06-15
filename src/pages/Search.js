@@ -12,11 +12,11 @@ export default function Home() {
 <Bar/>
 <div className="pt-4">
         <Tabs defaultActiveKey="home" className="justify-content-center d-flex">
-  <Tab eventKey="home" title="List">
+  <Tab eventKey="home" title="Tools">
     <Searchtool/>
   </Tab>
   
-  <Tab eventKey="profile" title="Tools">
+  <Tab eventKey="profile" title="List">
     <List/>
   </Tab>
 </Tabs>

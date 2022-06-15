@@ -5,10 +5,11 @@ import { useLocation } from "react-router-dom";
 
 export default function Sresult() {
   const loction = useLocation();
-  console.log("location", loction);
+  // console.log("location", loction);
   const abc = loction.state?.rehman?.occurrence;
   const wordcounts = loction.state?.rehman?.count;
   const WordSave = loction.state?.Word;
+  const criteria = loction.state?.criteria
 
   const [ScreenChange, setScreenChange] = useState(true);
   const [File, setFile] = useState([]);
@@ -20,13 +21,8 @@ export default function Sresult() {
 
   const Searchword = async (e) => {
     // setIsLoading(true)
-    fetch(`${url}/corpus/corpusFiles/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
+    // console.log('criteria--->',criteria)
+    fetch(`${url}/corpus/corpusFiles/${criteria!==undefined?criteria:"all"}`)
       .then((res) => res.json())
       .then((response) => {
         console.log("Files received search word --->", response);
@@ -50,7 +46,7 @@ export default function Sresult() {
             <div className="col-md-4 col-sm-4 p-5">
               <h3 className="d-flex justify-content-center">Files</h3>
               <div className="pt-3 border border-2 p-2 border-success pb-3">
-                <h5 className="">File Name</h5>
+                <h5 className="">File Name (Click to Open)</h5>
                 <br />
                 <table class="table table-hover" style={{ cursor: "pointer" }}>
                   <tbody>
@@ -78,7 +74,7 @@ export default function Sresult() {
               
                 <div className="float-start col-md-4 col-sm-4">
                   
-                  <p>Search Word: {WordSave}</p>
+                  <p>Searched Word: {WordSave}</p>
                 </div>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -90,7 +86,7 @@ export default function Sresult() {
                 </div>
               </div>
               <div className="pt-3 border border-2 p-2 border-success pb-3">
-                <h5 className="d-flex justify-content-center">Word List</h5>
+                <h5 className="d-flex justify-content-center">Search Results</h5>
                 <br />
                 <table class="table">
                   <thead>
