@@ -79,6 +79,42 @@ export default function Searchtool() {
     }
   }
 
+  const searchKeywordfreq = async (e) => {
+    // setIsLoading(true)
+    console.log('worddd-->', Word)
+    if (Word.length > 0) {
+      fetch(`${url}/corpus/wordFrequency`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          word: Word,
+          criteria: criteria
+        })
+      }).then(res => res.json())
+        .then((response) => {
+
+          // console.log('Data received search word --->', response);
+          // after
+          if (response.message === 'Success') {
+            // setIsLoading(false)
+            navigation('/Keywordf', { state: { rehman: response.doc, Word: Word, criteria } })
+
+            // setData(response.doc);
+          }
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else {
+      alert('You must type a word to search results')
+    }
+  }
+
   const searchKWIC = async (e) => {
     // setIsLoading(true)
     console.log('worddd-->', Word)
@@ -171,7 +207,7 @@ export default function Searchtool() {
                   </button>
                   {" "}
                   <button class="btn btn-primary"
-                    onClick={() => navigation('/Keywordf')}
+                  onClick={()=>searchKeywordfreq()}
                   >
                     KEYWORD FREQUENCY
                   </button>

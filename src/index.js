@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Sresult from "./pages/Sresult";
 import Search from "./pages/Search";
-import Keywordf from "./pages/keywordf";
+import Keywordf from "./pages/Keywordf";
 import Concordance from "./pages/Concordance";
 import Kwic from "./pages/Kwic";
 import List from "./pages/List";
