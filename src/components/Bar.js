@@ -7,11 +7,12 @@ export default function Bar() {
       <Navbar expand="lg">
         <Container>
           <Navbar.Brand className="brand">
-            <img
+          <Nav.Link href="/"> <img
               src="https://odoo-ai.com/pakloccorp/pakloc-removebg-preview.png"
               alt="logo"
               width="120"
-            />
+            /></Nav.Link>
+           
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse>

@@ -45,7 +45,7 @@ export default function Home() {
             <div class="bg-white p-2 w-75 ">
               <div className="d-flex justify-content-center">
                 <input
-                  placeholder="Search topics"
+                  placeholder="Search Word"
                   className="m-1 rounded border w-75"
                   onChange={(e)=>setWord(e.target.value)}
                 />
