@@ -9,9 +9,13 @@ import Concordance from "./pages/Concordance";
 import Kwic from "./pages/Kwic";
 import List from "./pages/List";
 import Listresult from "./pages/Listresult";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import LogReg from "./pages/LogReg";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import Forgot from "./pages/Forgot";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,6 +23,10 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/LogReg" element={<LogReg />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Forgot" element={<Forgot />} />
+        <Route path="/Register" element={<Register />} />
         <Route path="/Sresult" element={<Sresult />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Keywordf" element={<Keywordf />} />

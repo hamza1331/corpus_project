@@ -27,7 +27,7 @@ export default function Bar() {
                 <Nav.Link href="#link">Data</Nav.Link>
               </strong>
               <strong>
-                <Nav.Link href="#link">Login/Register</Nav.Link>
+                <Nav.Link href="/LogReg">Login/Register</Nav.Link>
               </strong>
               <strong>
                 <Nav.Link href="#link">Publications</Nav.Link>
