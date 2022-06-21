@@ -16,6 +16,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Forgot from "./pages/Forgot";
+import Downloaddata from "./pages/Downloaddata";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,6 +27,7 @@ root.render(
         <Route path="/LogReg" element={<LogReg />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Forgot" element={<Forgot />} />
+        <Route path="/Downloaddata" element={<Downloaddata/>} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Sresult" element={<Sresult />} />
         <Route path="/Search" element={<Search />} />

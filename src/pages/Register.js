@@ -32,10 +32,50 @@ export default function Register() {
                 <div className="form-outline mb-4">
                   <input
                     type="email"
-                    id="loginName"
                     className="form-control"
                     placeholder="Enter Email"
                   />
+                </div>
+<div className="form-outline mb-4">
+
+                <select class="form-select" aria-label="Default select example">
+  <option selected>--SELECT--</option>
+  <option value="1">AFGHANISTAN</option>
+  <option value="2">ALBANIA</option>
+  <option value="3">PAKISTAN</option>
+</select>
+</div>
+                
+
+                <div className="form-outline mb-4">
+                <div className="form-outline mb-4">
+                  <input
+                    type="select"
+                    className="form-control"
+                    placeholder="Please Select Category"
+                    readOnly
+                  />
+                </div>
+                <div>
+        <div className="form-check">
+          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+          <label className="form-check-label" htmlFor="flexRadioDefault1">
+            University professor: languages / linguistics
+          </label>
+        </div>
+        <div className="form-check">
+          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked />
+          <label className="form-check-label" htmlFor="flexRadioDefault2">
+          Graduate student: languages or linguistics
+          </label>
+        </div>
+        <div className="form-check">
+          <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" defaultChecked />
+          <label className="form-check-label" htmlFor="flexRadioDefault2">
+          University professor: not languages / linguistics
+          </label>
+        </div>
+      </div>
                 </div>
                 {/* Password input */}
                 <div className="form-outline mb-4">
