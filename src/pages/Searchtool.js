@@ -177,6 +177,7 @@ export default function Searchtool() {
                   }} class="form-select">
                     <option value="all">All</option>{" "}
                     <option value="fiction">Fiction</option>{" "}
+                    <option value="news">News Editorials</option>{" "}
                     <option value="articles">Articles</option>{" "}
                   </select>
                 </div>
@@ -236,6 +237,7 @@ export default function Searchtool() {
                     <select class=" form-select form-select-lg-3">
                       <option value="all">--Category--</option>{" "}
                       <option value="fiction">Fiction</option>{" "}
+                      <option value="news">News Editorials</option>{" "}
                       <option value="articles">Articles</option>{" "}
                     </select>
                   </div>

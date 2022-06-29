@@ -1,7 +1,17 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom'
 
 export default function Bar() {
+  const navigation = useNavigate();
+
+  useEffect(()=>{
+    let data = localStorage.getItem('corpusUserData')
+    if(data!==null){
+      setIsloggedIn(true)
+    }
+  },null)
+  const [isLoggedIn,setIsloggedIn] = useState(false)
   return (
     <div className="p-1">
       <Navbar expand="lg">
@@ -29,12 +39,25 @@ export default function Bar() {
           <NavDropdown.Item href="#action/3.2">Upload Data</NavDropdown.Item>
         </NavDropdown>
               </strong>
-              <strong>
+              {isLoggedIn==false && <strong>
                 <Nav.Link href="/LogReg">Login/Register</Nav.Link>
-              </strong>
+              </strong>}
               <strong>
                 <Nav.Link href="#link">Publications</Nav.Link>
               </strong>
+              {isLoggedIn===true &&   <button class="btn btn-danger btn-sm text-white"
+                    style={{ }}
+                    onClick={() => {
+                      localStorage.removeItem('corpusUserData')
+                      navigation('/')
+                      console.log('windowwww--->',window.location.pathname)
+                      if(window.location.pathname==='/'){
+                        window.location.reload()
+                      }
+                    }}
+                  >
+                    LOGOUT
+                  </button>}
             </Nav>
           </Navbar.Collapse>
         </Container>

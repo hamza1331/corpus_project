@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Bar from "../components/Bar";
+import { url } from "../components/Variable";
 
 export default function Downloaddata() {
+  const [data, setdata] = useState([])
+  const [isLoggedIn, setIsloggedIn] = useState(false)
+  const toTitleCase = (str) => {
+    return str.replace(
+      /\w\S*/g,
+      function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+    );
+  }
+  useEffect(() => {
+    let data = localStorage.getItem('corpusUserData')
+    if (data !== null) {
+      setIsloggedIn(true)
+    }
+    fetch(url + '/corpus/downloadCorpus')
+      .then((res) => res.json())
+      .then(response => {
+        if (response.message === 'Success') {
+          setdata(response.doc)
+        }
+      })
+  }, [])
+  const downloadFile = (e) => {
+    if(isLoggedIn){
+      window.open(url+'/corpus/getCorpusFile/'+e.target.innerText.toLowerCase(),'_blank')
+    }
+  }
   return (
     <div>
       <Bar />
@@ -13,7 +42,7 @@ export default function Downloaddata() {
             <div className="col-md-12 col-sm-12 p-5">
               <div className="pt-3 border border-2 p-2 border-success pb-3">
                 <h5 className="d-flex justify-content-center">
-                  Search Results
+                  Download Corpus Data
                 </h5>
                 <br />
                 <div class="table-responsive">
@@ -28,22 +57,20 @@ export default function Downloaddata() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                        <td>Cell</td>
-                      </tr>
+                      {data.length > 0 && data.map((corp) => <tr>
+                        <td className={isLoggedIn===true?"downloadable":"notDownloadable"} onClick={downloadFile} style={{
+                          color: isLoggedIn === true ? "blue" : "black",
+                          textDecoration: isLoggedIn === true ? "underline" : ""
+                        }}>{toTitleCase(corp.name)}</td>
+                        <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td>
+                        <td>May 2022</td>
+                        <td>{corp.genre}</td>
+                        <td>{corp.frequency + "%"}</td>
+                      </tr>)}
                     </tbody>
                   </table>
+                    <br/>
+                {isLoggedIn===false && <h6 style={{marginLeft:10}}>*User must login to access and download corpus data</h6>}
                 </div>
               </div>
             </div>
