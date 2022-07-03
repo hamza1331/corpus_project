@@ -167,6 +167,12 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <footer style={{textAlign:'center'}}>
+      <span style={{ color: "#b03e41"}}>
+      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
+          
+        </span>
+      </footer>
     </div>
   );
 }

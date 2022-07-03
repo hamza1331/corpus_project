@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Sresult from "./pages/Sresult";
+import Definition from './pages/Definition'
 import Search from "./pages/Search";
 import Keywordf from "./pages/Keywordf";
 import Concordance from "./pages/Concordance";
@@ -11,6 +12,7 @@ import List from "./pages/List";
 import Listresult from "./pages/Listresult";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Publication from "./pages/Publication";
 import LogReg from "./pages/LogReg";
 import "./index.css";
 import App from "./App";
@@ -27,10 +29,12 @@ root.render(
         <Route path="/LogReg" element={<LogReg />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Forgot" element={<Forgot />} />
+        <Route path="/Definition" element={<Definition />} />
         <Route path="/Downloaddata" element={<Downloaddata/>} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Sresult" element={<Sresult />} />
         <Route path="/Search" element={<Search />} />
+        <Route path="/Publication" element={<Publication />} />
         <Route path="/Keywordf" element={<Keywordf />} />
         <Route path="/Concordance" element={<Concordance />} />
         <Route path="/Kwic" element={<Kwic />} />

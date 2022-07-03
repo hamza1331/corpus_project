@@ -43,7 +43,7 @@ export default function Bar() {
                 <Nav.Link href="/LogReg">Login/Register</Nav.Link>
               </strong>}
               <strong>
-                <Nav.Link href="#link">Publications</Nav.Link>
+                <Nav.Link href="/Publication">Publications</Nav.Link>
               </strong>
               {isLoggedIn===true &&   <button class="btn btn-danger btn-sm text-white"
                     style={{ }}

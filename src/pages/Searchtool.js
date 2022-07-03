@@ -248,6 +248,7 @@ export default function Searchtool() {
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   )

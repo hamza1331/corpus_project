@@ -2,9 +2,8 @@ import React from "react";
 import Bar from '../components/Bar'
 import { Link,useNavigate } from "react-router-dom";
 import { Tab, Tabs } from "react-bootstrap";
+import List from './List'
 import Searchtool from "./Searchtool";
-import List from "./List";
-import Definition from "./Definition";
 
 
 export default function Home() {
@@ -21,14 +20,8 @@ export default function Home() {
     <List/>
   </Tab>
 </Tabs>
-<footer style={{textAlign:'center'}}>
-      <span style={{ color: "#b03e41"}}>
-      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
-          
-        </span>
-      </footer>
+
         </div>
-        
     </div>
   );
 }
