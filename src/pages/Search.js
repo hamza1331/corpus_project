@@ -2,8 +2,9 @@ import React from "react";
 import Bar from '../components/Bar'
 import { Link,useNavigate } from "react-router-dom";
 import { Tab, Tabs } from "react-bootstrap";
-import List from './List'
 import Searchtool from "./Searchtool";
+import List from "./List";
+import Definition from "./Definition";
 
 
 export default function Home() {

@@ -59,7 +59,7 @@ export default function Concordance() {
     }
   }
   return (
-    <div>
+    <div >
       <Bar />
 
       <div style={{ backgroundColor: "#f0faef", height: "100%" }}>
@@ -138,7 +138,7 @@ export default function Concordance() {
             </div>
           </div>
         </div>
-        <div className="container justify-content-center d-flex">
+        <div className="container justify-content-center">
           <div className="col-md-11 col-sm-11 p-5">
             <div className="col-md-2">
               <Link to="/Search">
@@ -152,6 +152,8 @@ export default function Concordance() {
             <div className="pt-3 border border-2 p-2 border-success pb-3">
               <h5 className="d-flex justify-content-center">Concordance</h5>
               <br />
+              <div className="table-responsive">
+
               <table class="table">
                 <thead>
                   <tr>
@@ -170,6 +172,7 @@ export default function Concordance() {
                   </tr>)}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>
