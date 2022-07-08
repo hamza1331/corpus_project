@@ -74,7 +74,7 @@ export default function Sresult() {
               
                 <div className="float-start col-md-4 col-sm-4">
                   
-                  <p>Searched Word: {WordSave}</p>
+                  <p>Searched Word: <strong className="text-success">{WordSave}</strong></p>
                 </div>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;

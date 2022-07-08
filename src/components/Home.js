@@ -41,8 +41,14 @@ export default function Home() {
     <div style={{ backgroundColor: "#f0faef" }}>
       <div className="container">
         <div className="row">
+          <span>
+<br/>
+        <strong>"You Shall Know a word by the company it keeps."</strong> Firth (1957)
+          </span>
           <div className="pt-4 d-flex justify-content-center">
+            
             <div class="bg-white p-2 w-75 ">
+              
               <div className="d-flex justify-content-center">
                 <input
                   placeholder="Search Word"
@@ -56,13 +62,17 @@ export default function Home() {
                 >
                   <i class="fa fa-search"></i>
                 </button>
+
               </div>
+              
             </div>
+
           </div>
+          
           <div className="col-md-6 col-sm-6 p-5">
             <div className="pt-3 border border-2 p-2 border-success pb-3">
               <h6 className="p-3">
-                PacLocCorp represents corpus of PakEng and it is a collection of
+                PakLocCorp represents corpus of PakEng and it is a collection of
                 text from multiple genres and registers. There are currently 800
                 transcripts in total and 2 million words (1 million words per
                 year). These collections are a window to the variations of

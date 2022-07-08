@@ -34,6 +34,15 @@ export default function Bar() {
                 <Nav.Link href="/Search">Browse</Nav.Link>
               </strong>
               <strong>
+                <Nav.Link href="">Help</Nav.Link>
+              </strong>
+              <strong>
+                <Nav.Link href="">Contact Us</Nav.Link>
+              </strong>
+              <strong>
+                <Nav.Link href="">About</Nav.Link>
+              </strong>
+              <strong>
               <NavDropdown title="Data" id="basic-nav-dropdown">
           <NavDropdown.Item href="/Downloaddata">Download Data</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.2">Upload Data</NavDropdown.Item>
