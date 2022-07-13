@@ -45,6 +45,15 @@ export default function Publication() {
                 <strong>PUBLICATIONS</strong>
                 </h2>
                 <br />
+                <p>PakLocCorp is an ongoing research project based on previous research. Pakistani English has unique characteristics and the addition of Urduized words with and without English morphemes is observed in the current discourse. Researchers willing to explore this corpus, can access data through registration.</p>
+<p>PakLocCorp is open for contributions and freely available for research purposes.</p>
+<br/>
+<h4>For Citation</h4>
+<p>Zahra, F., Zahra, T., & Abbas, A. (2022, June 15). PakLocCorp. Retrieved July 8, 2022, from https://pakloccorp.com/ </p>
+       <br/>
+       <h4>Related Publications</h4>
+       <p>Reference to works using PakEng for research purposes can be found through the links provided here.</p>
+         <br/>
                 <div class="table-responsive">
                     <ol>
                         <li>

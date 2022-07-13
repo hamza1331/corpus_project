@@ -34,13 +34,13 @@ export default function Bar() {
                 <Nav.Link href="/Search">Browse</Nav.Link>
               </strong>
               <strong>
-                <Nav.Link href="">Help</Nav.Link>
+                <Nav.Link href="/Help">Help</Nav.Link>
               </strong>
               <strong>
-                <Nav.Link href="">Contact Us</Nav.Link>
+                <Nav.Link href="/Contact">Contact Us</Nav.Link>
               </strong>
               <strong>
-                <Nav.Link href="">About</Nav.Link>
+                <Nav.Link href="/About">About</Nav.Link>
               </strong>
               <strong>
               <NavDropdown title="Data" id="basic-nav-dropdown">

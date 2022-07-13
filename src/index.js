@@ -14,6 +14,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Publication from "./pages/Publication";
 import LogReg from "./pages/LogReg";
+import Contact from "./pages/Contact";
+import Help from "./pages/Help";
+import About from "./pages/About";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -29,6 +32,9 @@ root.render(
         <Route path="/LogReg" element={<LogReg />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Forgot" element={<Forgot />} />
+        <Route path="/Help" element={<Help />} />
+        <Route path="/Contact" element={<Contact />} />
+        <Route path="/About" element={<About/>} />
         <Route path="/Definition" element={<Definition />} />
         <Route path="/Downloaddata" element={<Downloaddata/>} />
         <Route path="/Register" element={<Register />} />
