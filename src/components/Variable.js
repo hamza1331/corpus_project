@@ -1,1 +1,1 @@
-export const url='https://4b3e-185-202-239-227.ngrok.io'
+export const url='https://frozen-meadow-98754.herokuapp.com'
