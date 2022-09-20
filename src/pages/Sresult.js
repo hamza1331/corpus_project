@@ -2,27 +2,69 @@ import React, { useState } from "react";
 import Bar from "../components/Bar";
 import { url } from "../components/Variable";
 import { useLocation } from "react-router-dom";
-
+import Pagination from '@mui/material/Pagination';
+import { ColorRing } from 'react-loader-spinner'
 export default function Sresult() {
   const loction = useLocation();
   // console.log("location", loction);
-  const abc = loction.state?.rehman?.occurrence;
-  const wordcounts = loction.state?.rehman?.count;
   const WordSave = loction.state?.Word;
   const criteria = loction.state?.criteria
 
   const [ScreenChange, setScreenChange] = useState(true);
   const [File, setFile] = useState([]);
   const [Data, SetData] = useState({});
-
+  const [page, setpage] = useState(1)
+  const [data, setData] = useState([])
+  const [numberOfPages, setnumberOfPages] = useState(1)
+  const [showLoader, setshowLoader] = useState(false)
+  const [totalHits, setTotalHits] = useState(0)
+  const [selectedFilename, setselectedFilename] = useState('')
   React.useEffect(() => {
-    Searchword();
+    getCorpusFiles();
+    searchWord(page, WordSave, criteria)
   }, []);
+  const searchWord = (page = 1, word = '', criteria = 'all') => {
+    if (word.length > 0) {
+      setshowLoader(true)
+      fetch(`${url}/corpus/searchWord/${page}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          word: word,
+          criteria
+        })
+      }).then(res => res.json())
+        .then((response) => {
+          setshowLoader(false)
+          // after
+          if (response.message === 'Success') {
+            console.log('Data received search word --->', response);
+            setData(response.doc.occurrence)
+            setnumberOfPages(response.doc.numberOfPages)
+            setTotalHits(response.doc.count)
+            // setIsLoading(false)
+            //  navigation('/Sresult' ,{state: {rehman : response.doc,Word:Word,criteria:"all"}})
 
-  const Searchword = async (e) => {
+            // setData(response.doc);
+          }
+
+        })
+        .catch((error) => {
+          setshowLoader(false)
+          console.log(error);
+        });
+    }
+    else {
+
+    }
+  }
+  const getCorpusFiles = async (e) => {
     // setIsLoading(true)
     // console.log('criteria--->',criteria)
-    fetch(`${url}/corpus/corpusFiles/${criteria!==undefined?criteria:"all"}`)
+    fetch(`${url}/corpus/corpusFiles/${criteria !== undefined ? criteria : "all"}`)
       .then((res) => res.json())
       .then((response) => {
         console.log("Files received search word --->", response);
@@ -56,6 +98,7 @@ export default function Sresult() {
                           onClick={() => {
                             SetData(item);
                             setScreenChange(false);
+                            setselectedFilename(item.fileName)
                           }}
                         >
                           <td>{item.fileName}</td>
@@ -69,24 +112,27 @@ export default function Sresult() {
             </div>
 
             <div className="col-md-8 col-sm-8 p-5">
-              <div className="container row">
-              &nbsp;
-              
+              <div style={{ display: "flex", justifyContent: 'space-between' }}>
                 <div className="float-start col-md-4 col-sm-4">
-                  
-                  <p>Searched Word: <strong className="text-success">{WordSave}</strong></p>
+                  <p>Word: <strong className="text-danger"> {WordSave}</strong></p>
+                  <p>Total Hits: <strong className="text-danger"> {totalHits}</strong></p>
                 </div>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <div className="float-end col-md-4 col-sm-4">
-                  
-                      <p className="px-4">Word Count: {wordcounts}</p>
-                  
-                </div>
+                <Pagination count={numberOfPages} page={page} color="primary"
+                  onChange={(e, value) => {
+                    setpage(value)
+                    setshowLoader(true)
+                    searchWord(value, WordSave, criteria)
+                    // loadData(WordSave, value)
+                    // load(WordSave)
+                  }} />
               </div>
               <div className="pt-3 border border-2 p-2 border-success pb-3">
-                <h5 className="d-flex justify-content-center">Search Results</h5>
+                {ScreenChange === false && <a href="#" onClick={e => {
+                  e.preventDefault()
+                  setScreenChange(true)
+                  setselectedFilename('')
+                }}>Go Back</a>}
+                <h5 className="d-flex justify-content-center">{selectedFilename.length > 0 ? selectedFilename : "Search Results"}</h5>
                 <br />
                 <table class="table">
                   <thead>
@@ -98,9 +144,9 @@ export default function Sresult() {
                     )}
                   </thead>
 
-                  <tbody>
+                  {showLoader == false && <tbody>
                     {ScreenChange === true &&
-                      abc?.map((a, index) => {
+                      data.length > 0 && data.map((a, index) => {
                         return (
                           <tr>
                             <td>{index + 1}</td>
@@ -114,17 +160,27 @@ export default function Sresult() {
                         <td>{Data.text}</td>
                       </tr>
                     )}
-                  </tbody>
+                  </tbody>}
+                  {showLoader === true && <ColorRing
+                    visible={showLoader}
+                    height="80"
+                    width="80"
+                    ariaLabel="blocks-loading"
+                    wrapperStyle={{ marginLeft: '50%' }}
+                    wrapperClass="blocks-wrapper"
+                    colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                  />}
                 </table>
+
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
-      <span style={{ color: "#b03e41"}}>
-      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
-          
+      <footer style={{ textAlign: 'center' }}>
+        <span style={{ color: "#b03e41" }}>
+          Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
+
         </span>
       </footer>
     </div>

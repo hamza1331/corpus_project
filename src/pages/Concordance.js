@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import Bar from "../components/Bar";
 import { url } from "../components/Variable";
 import { useLocation } from "react-router-dom";
+import Pagination from '@mui/material/Pagination';
+import { ColorRing } from 'react-loader-spinner'
+
 export default function Concordance() {
   const loction = useLocation();
   // console.log("location", loction);
@@ -14,43 +17,52 @@ export default function Concordance() {
   const [data,setData] = useState([])
   const [LN, setLN] = useState(6)
   const [RN, setRN] = useState(6)
-
+  const [page, setpage] = useState(1)
+  const [showText, setshowText] = useState(false)
+  const [filepath, setfilepath] = useState('')
+  const [fileText, setfileText] = useState('')
+  const [numberOfPages, setnumberOfPages] = useState(1)
+  const [showLoader, setshowLoader] = useState(false)
+  const [totalHits, setTotalHits] = useState(0)
   useEffect(()=>{
     // console.log('abc--->',abc)
-    if(abc){
-      setData(abc)
-    }else{
-
+    if(WordSave){
+      searchConcordance(LN,RN)
     }
   },[])
-  const searchConcordance = async (left=LN,right=RN) => {
+  const searchConcordance = async (left=LN,right=RN,word=WordSave,criteria='',page=1) => {
     // setIsLoading(true)
-    console.log('LN--->',left)
-    console.log('RN--->',right)
-    if (WordSave) {
-      fetch(`${url}/corpus/searchConcordance`, {
+    // console.log('LN--->',left)
+    // console.log('RN--->',right)
+    if (word) {
+      setshowLoader(true)
+      fetch(`${url}/corpus/searchConcordance/${page}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          word: WordSave,
-          criteria: criteria,
+          word: word,
+          criteria: criteria!==''?criteria:"all",
           LN:left,
           RN:right
         })
       }).then(res => res.json())
         .then((response) => {
+          setshowLoader(false)
           if (response.message === 'Success') {
             // setIsLoading(false)
             // navigation('/Concordance', { state: { rehman: response.doc, Word: Word, criteria } })
             console.log('response--->',response.doc)
             setData(response.doc.occurrence);
+            setnumberOfPages(response.doc.numberOfPages)
+            setTotalHits(response.doc.count)
           }
 
         })
         .catch((error) => {
+          setshowLoader(false)
           console.log(error);
         });
     }
@@ -148,11 +160,23 @@ export default function Concordance() {
               </Link>
             </div>
             <br />
-            <p>Searched Word: {"  "+WordSave}</p>
+            <div style={{ display: "flex", justifyContent: 'space-between' }}>
+            <div className="float-start col-md-4 col-sm-4">
+                  <p>Word: <strong className="text-danger"> {WordSave}</strong></p>
+                  <p>Total Hits: <strong className="text-danger"> {totalHits}</strong></p>
+                </div>
+              <Pagination count={numberOfPages} page={page} color="primary"
+                onChange={(e, value) => {
+                  setpage(value)
+                  setshowLoader(true)
+                  searchConcordance(LN, RN,WordSave,criteria,value)
+                  // load(WordSave)
+                }} />
+            </div>
             <div className="pt-3 border border-2 p-2 border-success pb-3">
-              <h5 className="d-flex justify-content-center">Concordance</h5>
+              <h3 className="d-flex justify-content-center">Concordance</h3>
               <br />
-              <table class="table">
+              {showLoader===false && <table class="table">
                 <thead>
                   <tr>
                     <th scope="col">Sr.</th>
@@ -165,18 +189,27 @@ export default function Concordance() {
                     {data.length>0 && data.map((doc,index)=><tr>
                     <th scope="row">{index+1}</th>
                     <td>{doc.preText}</td>
-                    <td>{WordSave && WordSave}</td>
+                    <td><b>{WordSave && WordSave}</b></td>
                     <td>{doc.postText}</td>
                   </tr>)}
                 </tbody>
-              </table>
+              </table>}
+              {showLoader === true && <ColorRing
+                visible={showLoader}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{ marginLeft: '50%' }}
+                wrapperClass="blocks-wrapper"
+                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+              />}
             </div>
           </div>
         </div>
       </div>
       <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
-      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
+      Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
       </footer>

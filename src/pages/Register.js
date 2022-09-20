@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { url } from "../components/Variable";
 import swal from 'sweetalert';
-
+import * as countries from './Countries'
 export default function Register() {
   const [fName, setfName] = useState('')
   const [lName, setlName] = useState('')
@@ -10,63 +10,63 @@ export default function Register() {
   const [category, setcategory] = useState('University professor: not languages / linguistics')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
- 
-  const validateEmail = (email) =>   {
+
+  const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
-    }
-  const handleSubmit = (e) =>{
+  }
+  const handleSubmit = (e) => {
     e.preventDefault()
     // console.log('email--->',email)
     // console.log(validateEmail(email))
-    if(fName===''){
+    if (fName === '') {
       alert('First Name is reuired')
       return
     }
-    else if(lName===''){
+    else if (lName === '') {
       alert('Last Name is reuired')
       return
     }
-    else if(email===''){
+    else if (email === '') {
       alert('Email is reuired')
       return
     }
-    else if(country===''){
+    else if (country === '') {
       alert('Country is reuired')
       return
     }
-    else if(password===''){
+    else if (password === '') {
       alert('Password is reuired')
       return
     }
-    else if(confirmPassword===''){
+    else if (confirmPassword === '') {
       alert('Confirm Password is reuired')
       return
     }
-    else if(password.length<6){
+    else if (password.length < 6) {
       alert('Password must be at least 6 characters')
       return
     }
-    else if(confirmPassword.length<6){
+    else if (confirmPassword.length < 6) {
       alert('Confirm Password must be at least 6 characters')
       return
     }
-    else if(validateEmail(email)===false){
+    else if (validateEmail(email) === false) {
       alert('Email is badly formatted. Engter correct email address')
       return
     }
-    else if(password!==confirmPassword){
+    else if (password !== confirmPassword) {
       alert('Password and confirm password must match')
       return
     }
-    else{
+    else {
       let data = {
         fName,
         lName,
         email,
         password,
         country,
-        userCategory:category
+        userCategory: category
       }
       fetch(`${url}/corpus/registerUser`, {
         method: "POST",
@@ -77,10 +77,10 @@ export default function Register() {
         body: JSON.stringify(data)
       }).then(res => res.json())
         .then((response) => {
-          console.log('response--->',response)
+          console.log('response--->', response)
           if (response.message === 'Success') {
             // setIsLoading(false)
-            if(response.doc!==null && response.doc!==undefined){
+            if (response.doc !== null && response.doc !== undefined) {
               swal({
                 title: "User created!",
                 text: "User successfully registered. Login now to continue!",
@@ -92,7 +92,7 @@ export default function Register() {
               setPassword('')
               setCountry('')
               setConfirmPassword('')
-            }else{
+            } else {
               // alert('No results found for word: '+Word)
               swal({
                 title: "User signup failed!",
@@ -103,7 +103,7 @@ export default function Register() {
 
             // setData(response.doc);
           }
-          else{
+          else {
             swal({
               title: "User signup failed!",
               text: response.err,
@@ -161,11 +161,14 @@ export default function Register() {
                 </div>
                 <div className="form-outline mb-4">
 
-                  <select onChange={e => setCountry(e.target.value)} value={country} class="form-select" aria-label="Default select example">
+                  <select onChange={e => {
+                    setCountry(e.target.value)
+                    // console.log('country ---> ',e.target.value)
+                  }} value={country} class="form-select" aria-label="Default select example">
                     <option value='0' selected>--SELECT--</option>
-                    <option value="AFGHANISTAN">AFGHANISTAN</option>
-                    <option value="ALBANIA">ALBANIA</option>
-                    <option value="PAKISTAN">PAKISTAN</option>
+                    {countries.map((cnt, index) => {
+                      return <option key={index} value={cnt.country}>{cnt.country}</option>
+                    })}
                   </select>
                 </div>
 
@@ -211,7 +214,7 @@ export default function Register() {
                   <input
                     type="password"
                     value={password}
-                    onChange={e=>setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     className="form-control"
                     placeholder="Enter Password"
                   />
@@ -221,7 +224,7 @@ export default function Register() {
                     type="password"
                     value={confirmPassword}
                     className="form-control"
-                    onChange={e=>setConfirmPassword(e.target.value)}
+                    onChange={e => setConfirmPassword(e.target.value)}
                     placeholder="Confirm Password"
                   />
                 </div>
@@ -240,10 +243,10 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
-      <span style={{ color: "#b03e41"}}>
-      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
-          
+      <footer style={{ textAlign: 'center' }}>
+        <span style={{ color: "#b03e41" }}>
+          Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
+
         </span>
       </footer>
     </div>

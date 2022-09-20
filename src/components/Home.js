@@ -3,39 +3,44 @@ import "../Styles/Home.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useNavigate } from 'react-router-dom'
 import {url} from './Variable'
-
+import swal from 'sweetalert'
 export default function Home() {
   const [Word,setWord] = useState('');
-
+  const [selectedIndex, setselectedIndex] = useState(0)
+  const categories = [
+    {
+      text:"All",
+      value:"all"
+    },
+    {
+      text:"Fiction",
+      value:"ficton"
+    },
+    {
+      text:"News Editorials",
+      value:"news"
+    },{
+      text:"Articles",
+      value:"articles"
+    },{
+      text:"Academics",
+      value:"academics"
+    }
+  ]
   const navigation = useNavigate();
   const Searchword = async (e) => {
     // setIsLoading(true)
-    fetch(`${url}/corpus/searchWord`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        word: Word,
-        criteria:"all"
-      })
-    }).then(res => res.json())
-      .then((response) => {
+    if(Word.length>0){
+      navigation('/Sresult' ,{state: {Word:Word,criteria:categories[selectedIndex].value}})
 
-        console.log('Data received search word --->', response);
-        // after
-        if (response.message === 'Success') {
-          // setIsLoading(false)
-         navigation('/Sresult' ,{state: {rehman : response.doc,Word:Word,criteria:"all"}})
-         
-          // setData(response.doc);
-        }
-
-      })
-      .catch((error) =>{
-        console.log(error);
+    }
+    else{
+      swal({
+        title: "Invalid search!",
+        text: "Search word can not be empty",
+        icon: 'error',
       });
+    }
   }
   return (
     <div style={{ backgroundColor: "#f0faef" }}>
@@ -43,7 +48,7 @@ export default function Home() {
         <div className="row">
           <span>
 <br/>
-        <strong>"You Shall Know a word by the company it keeps."</strong> Firth (1957)
+        <h2><strong>"You Shall Know a word by the company it keeps."</strong> Firth (1957)</h2>
           </span>
           <div className="pt-4 d-flex justify-content-center">
             
@@ -72,13 +77,7 @@ export default function Home() {
           <div className="col-md-6 col-sm-6 p-5">
             <div className="pt-3 border border-2 p-2 border-success pb-3">
               <h6 className="p-3">
-                PakLocCorp represents corpus of PakEng and it is a collection of
-                text from multiple genres and registers. There are currently 800
-                transcripts in total and 2 million words (1 million words per
-                year). These collections are a window to the variations of
-                English. It contains words from magazines, newspapers, fiction,
-                academic texts and business emails. This corpus is expanding and
-                open to contribution.
+              PakLocCorp represents corpus of PakEng and it is a collection of text from multiple genres and registers. There are currently 322 transcripts in total and 2.4 million words. These collections are a window to the variations of English. It contains words from magazines, newspapers, fiction, academic texts and research publications. This corpus is expanding and open to contribution.
               </h6>
               <br />
             </div>
@@ -98,14 +97,12 @@ export default function Home() {
                   }}
                   className="bg-white border border-2 border-black"
                 >
-                  <p>Fiction</p>
-                  <p>Business Emails</p>
-                  <p>Academics</p>
-                  <p>New Editorial</p>
-                  <p>Blogs</p>
-                  <p>Chats</p>
-                  <p>Email</p>
-                  <p>All</p>
+                  {categories.map((cat,ind)=>{
+                    return <option style={{backgroundColor:selectedIndex===ind?"lightblue":"transparent",padding:5}} onClick={e=>{
+                      e.preventDefault()
+                      setselectedIndex(ind)
+                    }} value={cat.value}>{cat.text}</option>
+                  })}
                 </Scrollbars>
               </div>
             </div>
@@ -154,7 +151,7 @@ export default function Home() {
       </div>
       <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
-      Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
+      Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
       </footer>

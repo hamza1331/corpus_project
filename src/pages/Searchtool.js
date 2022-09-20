@@ -10,32 +10,8 @@ export default function Searchtool() {
     // setIsLoading(true)
     console.log('worddd-->', Word)
     if (Word.length > 0) {
-      fetch(`${url}/corpus/searchWord`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          word: Word,
-          criteria: criteria
-        })
-      }).then(res => res.json())
-        .then((response) => {
+      navigation('/Sresult', { state: { Word: Word, criteria } })
 
-          // console.log('Data received search word --->', response);
-          // after
-          if (response.message === 'Success') {
-            // setIsLoading(false)
-            navigation('/Sresult', { state: { rehman: response.doc, Word: Word, criteria } })
-
-            // setData(response.doc);
-          }
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
     else {
       alert('You must type a word to search results')
@@ -45,34 +21,34 @@ export default function Searchtool() {
     // setIsLoading(true)
     console.log('worddd-->', Word)
     if (Word.length > 0) {
-      fetch(`${url}/corpus/searchConcordance`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          word: Word,
-          criteria: criteria,
-          LN: 6,
-          RN: 6
-        })
-      }).then(res => res.json())
-        .then((response) => {
+      // fetch(`${url}/corpus/searchConcordance/1`, {
+      //   method: "POST",
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Accept': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     word: Word,
+      //     criteria: criteria,
+      //     LN: 6,
+      //     RN: 6
+      //   })
+      // }).then(res => res.json())
+      //   .then((response) => {
 
-          // console.log('Data received search word --->', response);
-          // after
-          if (response.message === 'Success') {
-            // setIsLoading(false)
-            navigation('/Concordance', { state: { rehman: response.doc, Word: Word, criteria } })
+      //     // console.log('Data received search word --->', response);
+      //     // after
+      //     if (response.message === 'Success') {
+      //       // setIsLoading(false)
 
-            // setData(response.doc);
-          }
+      //       // setData(response.doc);
+      //     }
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      navigation('/Concordance', { state: { Word: Word, criteria } })
     }
     else {
       alert('You must type a word to search results')
@@ -83,32 +59,32 @@ export default function Searchtool() {
     // setIsLoading(true)
     console.log('worddd-->', Word)
     if (Word.length > 0) {
-      fetch(`${url}/corpus/wordFrequency`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          word: Word,
-          criteria: criteria
-        })
-      }).then(res => res.json())
-        .then((response) => {
+      // fetch(`${url}/corpus/wordFrequency`, {
+      //   method: "POST",
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Accept': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     word: Word,
+      //     criteria: criteria
+      //   })
+      // }).then(res => res.json())
+      //   .then((response) => {
 
-          // console.log('Data received search word --->', response);
-          // after
-          if (response.message === 'Success') {
-            // setIsLoading(false)
-            navigation('/Keywordf', { state: { rehman: response.doc, Word: Word, criteria } })
+      //     // console.log('Data received search word --->', response);
+      //     // after
+      //     if (response.message === 'Success') {
+      //       // setIsLoading(false)
 
-            // setData(response.doc);
-          }
+      //       // setData(response.doc);
+      //     }
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      navigation('/Keywordf', { state: { Word: Word, criteria } })
     }
     else {
       alert('You must type a word to search results')
@@ -119,32 +95,7 @@ export default function Searchtool() {
     // setIsLoading(true)
     console.log('worddd-->', Word)
     if (Word.length > 0) {
-      fetch(`${url}/corpus/findKWIC`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          word: Word,
-          criteria: criteria
-        })
-      }).then(res => res.json())
-        .then((response) => {
-
-          // console.log('Data received search word --->', response);
-          // after
-          if (response.message === 'Success') {
-            // setIsLoading(false)
-            navigation('/Kwic', { state: { rehman: response.doc, Word: Word, criteria } })
-
-            // setData(response.doc);
-          }
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      navigation('/Kwic', { state: {  Word: Word, criteria } })
     }
     else {
       alert('You must type a word to search results')
@@ -171,7 +122,7 @@ export default function Searchtool() {
                 &nbsp;
                 <div className="col-md-1">
 
-                  <select onChange={(e) => {
+                  <select value={criteria} onChange={(e) => {
                     // console.log('option--->',e.target.value)
                     setCriteria(e.target.value)
                   }} class="form-select">
@@ -179,6 +130,7 @@ export default function Searchtool() {
                     <option value="fiction">Fiction</option>{" "}
                     <option value="news">News Editorials</option>{" "}
                     <option value="articles">Articles</option>{" "}
+                    <option value="academics">Academics</option>{" "}
                   </select>
                 </div>
               </div>
@@ -219,8 +171,8 @@ export default function Searchtool() {
 
               <div className="justify-content-center">
                 <div className="container row">
-                  <div className="col-md-3"></div>
-                  <div className="col-md-3">
+                  <div className='col-md-4'></div>
+                  {/* <div className="col-md-3">
                     <label className="d-flex justify-content-center">
                       <strong>Writer:</strong>
                     </label>
@@ -229,19 +181,23 @@ export default function Searchtool() {
                       <option value="fiction">Fiction</option>{" "}
                       <option value="articles">Articles</option>{" "}
                     </select>
-                  </div>
-                  <div className="col-md-3">
+                  </div> */}
+                  <div className="col-md-4">
                     <label className=" d-flex justify-content-center">
                       <strong>Category:</strong>
                     </label>
-                    <select class=" form-select form-select-lg-3">
+                    <select value={criteria} onChange={e=>{
+                      e.preventDefault()
+                      setCriteria(e.target.value)
+                    }} class=" form-select form-select-lg-3">
                       <option value="all">--Category--</option>{" "}
                       <option value="fiction">Fiction</option>{" "}
                       <option value="news">News Editorials</option>{" "}
                       <option value="articles">Articles</option>{" "}
+                      <option value="academics">Academics</option>{" "}
                     </select>
                   </div>
-                  <div className="col-md-3"></div>
+                  <div className="col-md-4"></div>
                 </div>
                 <br />
               </div>
