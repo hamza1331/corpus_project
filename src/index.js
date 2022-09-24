@@ -22,6 +22,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Forgot from "./pages/Forgot";
 import Downloaddata from "./pages/Downloaddata";
+import Uploadddata from "./pages/UploadData";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,6 +38,7 @@ root.render(
         <Route path="/About" element={<About/>} />
         <Route path="/Definition" element={<Definition />} />
         <Route path="/Downloaddata" element={<Downloaddata/>} />
+        <Route path="/Uploaddata" element={<Uploadddata/>} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Sresult" element={<Sresult />} />
         <Route path="/Search" element={<Search />} />

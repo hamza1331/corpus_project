@@ -43,9 +43,9 @@ export default function Bar() {
                 <Nav.Link href="/About">About</Nav.Link>
               </strong>
               <strong>
-              <NavDropdown title="Data" id="basic-nav-dropdown">
+              <NavDropdown title="Corpora of PakEng" id="basic-nav-dropdown">
           <NavDropdown.Item href="/Downloaddata">Download Data</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.2">Upload Data</NavDropdown.Item>
+          <NavDropdown.Item href="/Uploaddata">Upload Data</NavDropdown.Item>
         </NavDropdown>
               </strong>
               {isLoggedIn==false && <strong>

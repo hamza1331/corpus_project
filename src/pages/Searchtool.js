@@ -57,38 +57,7 @@ export default function Searchtool() {
 
   const searchKeywordfreq = async (e) => {
     // setIsLoading(true)
-    console.log('worddd-->', Word)
-    if (Word.length > 0) {
-      // fetch(`${url}/corpus/wordFrequency`, {
-      //   method: "POST",
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Accept': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     word: Word,
-      //     criteria: criteria
-      //   })
-      // }).then(res => res.json())
-      //   .then((response) => {
-
-      //     // console.log('Data received search word --->', response);
-      //     // after
-      //     if (response.message === 'Success') {
-      //       // setIsLoading(false)
-
-      //       // setData(response.doc);
-      //     }
-
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-      navigation('/Keywordf', { state: { Word: Word, criteria } })
-    }
-    else {
-      alert('You must type a word to search results')
-    }
+    navigation('/Keywordf', { state: { criteria } })
   }
 
   const searchKWIC = async (e) => {
@@ -129,7 +98,6 @@ export default function Searchtool() {
                     <option value="all">All</option>{" "}
                     <option value="fiction">Fiction</option>{" "}
                     <option value="news">News Editorials</option>{" "}
-                    <option value="articles">Articles</option>{" "}
                     <option value="academics">Academics</option>{" "}
                   </select>
                 </div>
@@ -193,7 +161,6 @@ export default function Searchtool() {
                       <option value="all">--Category--</option>{" "}
                       <option value="fiction">Fiction</option>{" "}
                       <option value="news">News Editorials</option>{" "}
-                      <option value="articles">Articles</option>{" "}
                       <option value="academics">Academics</option>{" "}
                     </select>
                   </div>

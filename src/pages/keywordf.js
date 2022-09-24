@@ -20,8 +20,6 @@ export default function Keywordf() {
   const [showLoader, setshowLoader] = useState(false)
   const [totalHits, setTotalHits] = useState(0)
   const [selectedFilename, setselectedFilename] = useState('')
-  const abc = loction.state?.rehman?.frequency;
-  const word = loction.state?.Word;
 
   useEffect(()=>{
     getCorpusFiles()
