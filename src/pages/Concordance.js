@@ -189,7 +189,7 @@ export default function Concordance() {
                     {data.length>0 && data.map((doc,index)=><tr>
                     <th scope="row">{index+1}</th>
                     <td>{doc.preText}</td>
-                    <td><b>{WordSave && WordSave}</b></td>
+                    <td style={{color:'red',fontWeight:'bold'}}><b>{WordSave && WordSave}</b></td>
                     <td>{doc.postText}</td>
                   </tr>)}
                 </tbody>

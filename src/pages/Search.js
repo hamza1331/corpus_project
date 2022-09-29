@@ -17,7 +17,7 @@ export default function Home() {
     <Searchtool/>
   </Tab>
   
-  <Tab eventKey="profile" title="List">
+  <Tab eventKey="profile" title="Urduized WordList">
     <List/>
   </Tab>
 </Tabs>

@@ -132,7 +132,7 @@ export default function Kwic() {
                         })
                     }}>{item.filename}</a></th>
                     <td><RenderText text={item.preText} /></td>
-                    <td>{WordSave}</td>
+                    <td style={{color:'red',fontWeight:'bold'}}>{WordSave}</td>
                     <td>{item.postText}</td>
                   </tr>)}
 

@@ -17,6 +17,8 @@ import LogReg from "./pages/LogReg";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import About from "./pages/About";
+import Terms from "./pages/Terms";
+import Investigators from "./pages/Investigators";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -36,6 +38,8 @@ root.render(
         <Route path="/Help" element={<Help />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/About" element={<About/>} />
+        <Route path="/Terms" element={<Terms/>} />
+        <Route path="/Investigators" element={<Investigators/>} />
         <Route path="/Definition" element={<Definition />} />
         <Route path="/Downloaddata" element={<Downloaddata/>} />
         <Route path="/Uploaddata" element={<Uploadddata/>} />

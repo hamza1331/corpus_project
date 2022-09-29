@@ -14,9 +14,8 @@ export default function Contact() {
                 <div>
                   <br/>
                 <h2>Let's Plan A Meeting</h2>
-                <p>It's the right time to start a project with our team of professionals and bring the ideas into reality,
-                     more efficiently and effectively. Let us help you to ensure enterprise success through technological
-                     and Digital Transformation with AI and Automation Services and solutions that we develop.
+                <p>
+                It's the right time to start a project with our team of professionals and bring the ideas into reality, more efficiently and effectively. Let us help you to ensure success through technological and Digital Transformation with Corpus analysis tools and linguistic data sets that we develop.
                 </p>
                 </div>
                 <br/>

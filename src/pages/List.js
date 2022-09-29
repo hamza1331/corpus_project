@@ -46,6 +46,24 @@ export default function List() {
 
         </div>
         <br />
+              <h3 style={{fontWeight:'bold'}}>What is an Urduized word?</h3>
+              <p>
+              When a local Urdu word is inserted in English sentence, it gives meaning to the English text. Several scholars have used Urduized English (Baumgardener, 1993) or Urduized words to represent such insertions. Mehboob (2003) provided a complete list of 54 categories of borrowed words and Tallat (1993) discussed Urduized meaning of Pakistani English.
+              <br/>
+              Example sentences are given below:
+              <ol>
+                <li>
+                Edibles: At some time they again came to the haleem [a thick soup] shop on motorcycles and threw his two daigs [a cauldron].Mehboob (2003)
+
+                </li>
+                <li>Ghizaayyat bakhsh full cream homogenized taazaa duudh. Baumgardener (1993)
+                </li>
+                <li>
+                Everyone in the world, it seems, is talking about the judge-sahib’s murder. Aslam (1993)
+
+                </li>
+              </ol>
+              </p>
         <div className="pt-4 d-flex justify-content-center">
           <div class="bg-white p-2 w-75 ">
             <div className="d-flex justify-content-center">

@@ -4,6 +4,22 @@ import { url } from "../components/Variable";
 import { useLocation } from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import { ColorRing } from 'react-loader-spinner'
+var _ = require('lodash');
+
+const Highlighted = ({text = '', highlight = ''}) => {
+  if (!highlight.trim()) {
+    return <span>{text}</span>
+  }
+  const regex = new RegExp(`(${_.escapeRegExp(highlight)})`, 'gi')
+  const parts = text.split(regex)
+  return (
+    <span>
+       {parts.filter(part => part).map((part, i) => (
+           regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+       ))}
+   </span>
+  )
+}
 export default function Sresult() {
   const loction = useLocation();
   // console.log("location", loction);
@@ -150,7 +166,7 @@ export default function Sresult() {
                         return (
                           <tr>
                             <td>{index + 1}</td>
-                            <td>{a.complete}</td>
+                            <td><Highlighted text={a.complete} highlight={WordSave}/></td>
                           </tr>
                         );
                       })}
