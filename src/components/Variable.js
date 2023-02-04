@@ -1,1 +1,1 @@
-export const url='https://morning-inlet-23020.herokuapp.com'
+export const url='https://pakloccorpapi.pakgentext.com'

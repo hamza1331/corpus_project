@@ -43,8 +43,8 @@ export default function Home() {
             value: "ficton"
         },
         {
-            text: "News Editorials",
-            value: "news"
+            text: "Media",
+            value: "media"
         }, {
             text: "Academics",
             value: "academics"
