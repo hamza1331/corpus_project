@@ -1,1 +1,1 @@
-export const url='https://pakloccorpapi.pakgentext.com'
+export const url='https://api.pakloccorp.com'
