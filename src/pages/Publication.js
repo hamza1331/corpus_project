@@ -3,6 +3,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Bar from "../components/Bar";
 import { url } from "../components/Variable";
+import Copyright from "../components/Copyright";
 
 export default function Publication() {
   const [data, setdata] = useState([])
@@ -108,12 +109,14 @@ export default function Publication() {
             </div>
           </div>
         </div>
-        <footer style={{textAlign:'center'}}>
+        {/* <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
       Last Updated: 1st July, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
-      </footer>
+      </footer> */}
+
+      <Copyright/>
       </div>
       
     </div>

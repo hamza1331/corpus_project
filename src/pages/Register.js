@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { url } from "../components/Variable";
 import swal from 'sweetalert';
 import * as countries from './Countries'
+import Copyright from "../components/Copyright";
 export default function Register() {
   const [fName, setfName] = useState('')
   const [lName, setlName] = useState('')
@@ -243,12 +244,14 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <footer style={{ textAlign: 'center' }}>
+      {/* <footer style={{ textAlign: 'center' }}>
         <span style={{ color: "#b03e41" }}>
           Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
 
         </span>
-      </footer>
+      </footer> */}
+
+      <Copyright/>
     </div>
   );
 }

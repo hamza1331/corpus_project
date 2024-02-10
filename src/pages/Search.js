@@ -5,6 +5,7 @@ import { Tab, Tabs } from "react-bootstrap";
 import Searchtool from "./Searchtool";
 import List from "./List";
 import Definition from "./Definition";
+import Copyright from "../components/Copyright";
 
 
 export default function Home() {
@@ -21,12 +22,13 @@ export default function Home() {
     <List/>
   </Tab>
 </Tabs>
-<footer style={{textAlign:'center'}}>
+{/* <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
       Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
-      </footer>
+      </footer> */}
+      <Copyright/>
         </div>
         
     </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Copyright from '../components/Copyright'
 
 export default function Forgot() {
   return (
@@ -59,12 +60,14 @@ export default function Forgot() {
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
+      {/* <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
       Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
-      </footer>
+      </footer> */}
+
+      <Copyright/>
     </div>
   )
 }

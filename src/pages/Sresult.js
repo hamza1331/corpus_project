@@ -4,6 +4,7 @@ import { url } from "../components/Variable";
 import { useLocation } from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import { ColorRing } from 'react-loader-spinner'
+import Copyright from "../components/Copyright";
 var _ = require('lodash');
 
 const Highlighted = ({text = '', highlight = ''}) => {
@@ -193,12 +194,14 @@ export default function Sresult() {
           </div>
         </div>
       </div>
-      <footer style={{ textAlign: 'center' }}>
+      {/* <footer style={{ textAlign: 'center' }}>
         <span style={{ color: "#b03e41" }}>
           Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
 
         </span>
-      </footer>
+      </footer> */}
+
+      <Copyright/>
     </div>
   );
 }

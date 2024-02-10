@@ -2,6 +2,7 @@ import React, { useState,useEffect } from "react";
 import { url } from "../components/Variable";
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom'
+import Copyright from "../components/Copyright";
 
 export default function Login() {
   const navigation = useNavigate();
@@ -167,12 +168,13 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
+      {/* <footer style={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
       Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
-      </footer>
+      </footer> */}
+      <Copyright/>
     </div>
   );
 }

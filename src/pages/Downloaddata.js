@@ -4,6 +4,7 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Bar from "../components/Bar";
 import { url } from "../components/Variable";
 import { ColorRing } from 'react-loader-spinner';
+import Copyright from "../components/Copyright";
 export default function Downloaddata() {
   const [data, setdata] = useState([])
   const [isLoggedIn, setIsloggedIn] = useState(false)
@@ -89,12 +90,14 @@ export default function Downloaddata() {
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
+      {/* <footer style
+      ={{textAlign:'center'}}>
       <span style={{ color: "#b03e41"}}>
       Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com 
           
         </span>
-      </footer>
+      </footer> */}
+      <Copyright/>
     </div>
   );
 }

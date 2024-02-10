@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { url } from './Variable'
 import { Link } from "react-router-dom";
 import { ColorRing } from 'react-loader-spinner';
-
+import { categories } from "./categories";
 import swal from 'sweetalert'
+import Copyright from "./Copyright";
 export default function Home() {
     const [data, setdata] = useState([])
     const [Word, setWord] = useState('');
@@ -14,6 +15,9 @@ export default function Home() {
     const [showFilesTable, setshowFilesTable] = useState(false)
     const [selectedCategory, setselectedCategory] = useState('')
     const [showLoader, setshowLoader] = useState(false)
+    const [showCat2, setShowCat2] = useState(false)
+    const [categories2, setcategories2] = useState([])
+    const [cat2Index,setCat2index] = useState(-1)
     const toTitleCase = (str) => {
         return str.replace(
             /\w\S*/g,
@@ -33,23 +37,7 @@ export default function Home() {
                 }
             })
     }, [])
-    const categories = [
-        {
-            text: "All",
-            value: "all"
-        },
-        {
-            text: "Fiction",
-            value: "ficton"
-        },
-        {
-            text: "Media",
-            value: "media"
-        }, {
-            text: "Academics",
-            value: "academics"
-        }
-    ]
+
     const navigation = useNavigate();
     const Searchword = async (e) => {
         // setIsLoading(true)
@@ -110,25 +98,60 @@ export default function Home() {
 
                     <div className="col-md-6 col-sm-6 p-5">
                         <div className="pt-3 border border-success border-2">
-                            <div className="d-flex justify-content-center">
-                                <h5 className="pb-2">Categories</h5>
-                            </div>
-                            <div className="d-flex justify-content-center pb-4">
-                                <Scrollbars
-                                    style={{
-                                        height: "170px",
-                                        width: "280px",
-                                        paddingLeft: "19px",
-                                    }}
-                                    className="bg-white border border-2 border-black"
-                                >
-                                    {categories.map((cat, ind) => {
-                                        return <option style={{ backgroundColor: selectedIndex === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
-                                            e.preventDefault()
-                                            setselectedIndex(ind)
-                                        }} value={cat.value}>{cat.text}</option>
-                                    })}
-                                </Scrollbars>
+                            <div className="grid-container">
+                                <div className="grid-item">
+                                    <div className="d-flex justify-content-center">
+                                        <h5 className="pb-2">Categories</h5>
+                                    </div>
+                                    <div className="d-flex justify-content-center pb-4">
+                                        <Scrollbars
+                                            style={{
+                                                height: "170px",
+                                                width: "180px",
+                                                paddingLeft: "19px"
+                                            }}
+                                            className="bg-white border border-2 border-black"
+                                        >
+                                            {categories.map((cat, ind) => {
+                                                return <option style={{ backgroundColor: selectedIndex === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
+                                                    e.preventDefault()
+                                                    setselectedIndex(ind)
+                                                    if (cat.children.length > 0) {
+                                                        setcategories2(cat.children)
+                                                        setShowCat2(true)
+                                                    }
+                                                    else{
+                                                        setcategories2([])
+                                                        setShowCat2(false)
+                                                    }
+                                                }} value={cat.value}>{cat.text}</option>
+                                            })}
+                                        </Scrollbars>
+                                    </div>
+                                </div>
+                                {showCat2 === true && categories2.length > 0 && <div className="grid-item">
+                                    <div className="d-flex justify-content-center">
+                                        <h5 className="pb-2">{categories[selectedIndex].text}</h5>
+                                    </div>
+                                    <div className="d-flex justify-content-center pb-4">
+                                        <Scrollbars
+                                            style={{
+                                                height: "170px",
+                                                width: "180px",
+                                                paddingLeft: "19px",
+                                            }}
+                                            className="bg-white border border-2 border-black"
+                                        >
+                                            {categories2.length > 0 && categories2.map((cat, ind) => {
+                                                return <option style={{ backgroundColor: cat2Index === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
+                                                    e.preventDefault()
+                                                    // setselectedIndex(ind)
+                                                    setCat2index(ind)
+                                                }} value={cat.value}>{cat.text}</option>
+                                            })}
+                                        </Scrollbars>
+                                    </div>
+                                </div>}
                             </div>
                         </div>
                     </div>
@@ -2510,364 +2533,7 @@ export default function Home() {
                                             <td><b>864629</b></td>
                                         </tr>
                                     </table>}
-                                {/* <table className="table">
-                  <thead>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td></td>
-                      <td><b>File ID</b></td>
-                      <td><b>Genre</b></td>
-                      <td><b>Category</b></td>
-                      <td><b>Files</b></td>
-                      <td><b>Words</b></td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td><b>NEWS</b></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>1ED2-22 to 153ED2-22</td>
-                      <td>Editorials /opinion articles</td>
-                      <td>The NEWS</td>
-                      <td>153</td>
-                      <td>62718</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>AFG001  to AFG050</td>
-                      <td>Articles on Afghan social life and women</td>
-                      <td>The News</td>
-                      <td>50</td>
-                      <td>24118</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>MA-Nov-001-030</td>
-                      <td>Magazine articles MNR</td>
-                      <td>Magazine News articles</td>
-                      <td>30</td>
-                      <td>36449</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>BLGPK001-BLGPK002</td>
-                      <td>Blogs</td>
-                      <td>Right to education</td>
-                      <td>1</td>
-                      <td>6289</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td>Blogs</td>
-                      <td>Blog Pakistan</td>
-                      <td>1</td>
-                      <td>7389</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>1YNG-10YNG</td>
-                      <td>Young world</td>
-                      <td>Children's fiction and reports</td>
-                      <td>10</td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>3.DW-NP</td>
-                      <td>News reports Dawn</td>
-                      <td>Taliban</td>
-                      <td>1</td>
-                      <td>19075</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>3.NYT-NP</td>
-                      <td>News reports Newyork Times</td>
-                      <td>Taliban</td>
-                      <td>1</td>
-                      <td>52074</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>3.TNI-NP</td>
-                      <td>News reports The NEWS International</td>
-                      <td>Taliban</td>
-                      <td>1</td>
-                      <td>24491</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>3.UT-NP</td>
-                      <td>News reports USA Today</td>
-                      <td>Taliban</td>
-                      <td>1</td>
-                      <td>41081</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><b>Academics</b></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>CRT001-CRT040</td>
-                      <td>Student writings</td>
-                      <td>Assignments/fiction etc</td>
-                      <td>40</td>
-                      <td>52496</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC001</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>76261</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC002</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>56198</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC003</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>96569</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC004</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>56947</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC005</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>61432</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC006</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>85603</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC007</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>70924</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC008</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>142197</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC009</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>34480</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC010</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>110713</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC011</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>84109</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC012</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>118937</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC013</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>180143</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC014</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>73304</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>PHDHEC015</td>
-                      <td>PhD theses</td>
-                      <td>Linguistics and literature</td>
-                      <td>1</td>
-                      <td>69750</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td><b>Fiction</b></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>CH1HF-CH9HF</td>
-                      <td>Kamila Shamsie</td>
-                      <td>Home Fire</td>
-                      <td>9</td>
-                      <td>68589</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>BRNTSHD</td>
-                      <td>Kamila Shamsie</td>
-                      <td>Burnt shadows</td>
-                      <td>1</td>
-                      <td>119787</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>KARTGRPH</td>
-                      <td>Kamila Shamsie</td>
-                      <td>Kartography</td>
-                      <td>1</td>
-                      <td>102316</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>BRKVRS</td>
-                      <td>Kamila Shamsie</td>
-                      <td>Broken verses</td>
-                      <td>1</td>
-                      <td>110438</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>INOTHER</td>
-                      <td>Daniyal Mueenuddin</td>
-                      <td>In other rooms, other wonders</td>
-                      <td>1</td>
-                      <td>9474</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>ICBP</td>
-                      <td>Bipsi sidhwa</td>
-                      <td>Ice Candy Man</td>
-                      <td>1</td>
-                      <td>88921</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>MYFLD</td>
-                      <td>Tehmina Durrani</td>
-                      <td>My Feudal Lord</td>
-                      <td>1</td>
-                      <td>115789</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>THERLFND</td>
-                      <td>Mohsin Hamid</td>
-                      <td>The reluctant fundamentalist</td>
-                      <td>1</td>
-                      <td>42250</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>IMMALA</td>
-                      <td>Malala Yousafzai</td>
-                      <td>I am Malala</td>
-                      <td>1</td>
-                      <td>40887</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>SRBRD</td>
-                      <td>Nadeem Aslam</td>
-                      <td>Season of Rain Birds</td>
-                      <td>1</td>
-                      <td>56133</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td><b>Total Number of words</b></td>
-                      <td></td>
-                      <td></td>
-                      <td><b>2398331</b></td>
-                    </tr>
-                  </tbody>
-                </table> */}
+
                                 <br />
                             </div>
                         </div>
@@ -2911,12 +2577,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <footer style={{ textAlign: 'center' }}>
-                <span style={{ color: "#b03e41" }}>
-                    Last Updated: 8 October, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
-
-                </span>
-            </footer>
+            <Copyright />
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import Bar from "../components/Bar";
 import Pagination from '@mui/material/Pagination';
 import { ColorRing } from 'react-loader-spinner'
+import Copyright from "../components/Copyright";
 export default function Keywordf() {
   const loction = useLocation();
 
@@ -138,11 +139,13 @@ export default function Keywordf() {
           </div>
         </div>
       </div>
-      <footer style={{textAlign:'center'}}>
+      {/* <footer style={{textAlign:'center'}}>
         <span style={{ color: "#b03e41"}}>
       Last Updated: 20 September, 2022.{"    "}PakLocCorp. Copyrights &copy; pakloccorp.com
         </span>
-      </footer>
+      </footer> */}
+
+      <Copyright/>
     </div>
   );
 }
