@@ -7,50 +7,50 @@ const categories = [
         ]
     },
     {
-        text: "Fiction",
-        value: "ficton",
+        text: "Literary Discourse",
+        value: "literary",
         children: [
 
         ]
     },
     {
-        text: "Media",
+        text: "Media Discourse",
         value: "media",
         children: [
 
         ]
     }, {
-        text: "Academics",
-        value: "academics",
+        text: "Academic Discourse",
+        value: "academic",
         children: [
-            {
-                text: "CREATIVE WRITINGS",
-                value: "CREATIVE WRITINGS",
-                children: [
+            // {
+            //     text: "CREATIVE WRITINGS",
+            //     value: "CREATIVE WRITINGS",
+            //     children: [
 
-                ]
-            },
-            {
-                text: "proposals",
-                value: "proposals",
-                children: [
+            //     ]
+            // },
+            // {
+            //     text: "proposals",
+            //     value: "proposals",
+            //     children: [
 
-                ]
-            },
-            {
-                text: "RESERCH ARTICLES",
-                value: "RESERCH ARTICLES",
-                children: [
+            //     ]
+            // },
+            // {
+            //     text: "RESERCH ARTICLES",
+            //     value: "RESERCH ARTICLES",
+            //     children: [
 
-                ]
-            },
-            {
-                text: "Theses TXT",
-                value: "Theses TXT",
-                children: [
+            //     ]
+            // },
+            // {
+            //     text: "Theses TXT",
+            //     value: "Theses TXT",
+            //     children: [
 
-                ]
-            }
+            //     ]
+            // }
         ]
     }
 ]
