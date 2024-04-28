@@ -33,8 +33,8 @@ export default function Downloaddata() {
       })
   }, [])
   const downloadFile = (e) => {
-    if(isLoggedIn){
-      window.open(url+'/corpus/getCorpusFile/'+e.target.innerText.toLowerCase(),'_blank')
+    if (isLoggedIn) {
+      window.open(url + '/corpus/getCorpusFile/' + e.target.innerText.toLowerCase(), '_blank')
     }
   }
   return (
@@ -57,33 +57,34 @@ export default function Downloaddata() {
                         <th scope="col">Size</th>
                         <th scope="col">Time</th>
                         <th scope="col">Genre</th>
-                        <th scope="col">Frequency (Urduised words)</th>
+                        {/* <th scope="col">Frequency (Urduised words)</th> */}
                       </tr>
                     </thead>
-                    {showLoader===false && <tbody>
+                    {showLoader === false && <tbody>
                       {data.length > 0 && data.map((corp) => <tr>
-                        <td className={isLoggedIn===true?"downloadable":"notDownloadable"} onClick={downloadFile} style={{
+                        <td className={isLoggedIn === true ? "downloadable" : "notDownloadable"} onClick={downloadFile} style={{
                           color: isLoggedIn === true ? "blue" : "black",
                           textDecoration: isLoggedIn === true ? "underline" : ""
                         }}>{toTitleCase(corp.name)}</td>
-                        <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td>
+                        {/* <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td> */}
+                        <td>{corp.noOfWords + " words"}</td>
                         <td>{corp.time}</td>
                         <td>{corp.genre}</td>
-                        <td>{corp.frequency + "%"}</td>
+                        {/* <td>{corp.frequency + "%"}</td> */}
                       </tr>)}
                     </tbody>}
                     {showLoader === true && <ColorRing
-                visible={showLoader}
-                height="80"
-                width="80"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{ marginLeft: '50%' }}
-                wrapperClass="blocks-wrapper"
-                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-              />}
+                      visible={showLoader}
+                      height="80"
+                      width="80"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{ marginLeft: '50%' }}
+                      wrapperClass="blocks-wrapper"
+                      colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />}
                   </table>
-                    <br/>
-                {isLoggedIn===false && <h6 style={{marginLeft:10}}>*User must login to access and download corpus data</h6>}
+                  <br />
+                  {isLoggedIn === false && <h6 style={{ marginLeft: 10 }}>*User must login to access and download corpus data</h6>}
                 </div>
               </div>
             </div>
@@ -97,7 +98,7 @@ export default function Downloaddata() {
           
         </span>
       </footer> */}
-      <Copyright/>
+      <Copyright />
     </div>
   );
 }

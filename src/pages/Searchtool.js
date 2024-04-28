@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { url } from '../components/Variable'
+import { categories } from '../components/categories';
 export default function Searchtool() {
   const navigation = useNavigate();
   const [Word, setWord] = useState('');
@@ -8,7 +9,7 @@ export default function Searchtool() {
 
   const Searchword = async (e) => {
     // setIsLoading(true)
-    console.log('worddd-->', Word)
+    // console.log('worddd-->', Word)
     if (Word.length > 0) {
       navigation('/Sresult', { state: { Word: Word, criteria } })
 
@@ -19,7 +20,7 @@ export default function Searchtool() {
   }
   const searchConcordance = async (e) => {
     // setIsLoading(true)
-    console.log('worddd-->', Word)
+    // console.log('worddd-->', Word)
     if (Word.length > 0) {
       // fetch(`${url}/corpus/searchConcordance/1`, {
       //   method: "POST",
@@ -95,10 +96,9 @@ export default function Searchtool() {
                     // console.log('option--->',e.target.value)
                     setCriteria(e.target.value)
                   }} class="form-select">
-                    <option value="all">All</option>{" "}
-                    <option value="fiction">Fiction</option>{" "}
-                    <option value="news">News Editorials</option>{" "}
-                    <option value="academics">Academics</option>{" "}
+                    {categories.map((cat)=>{
+                      return<option value={cat.value}>{cat.text} {"  "}</option>
+                    })}
                   </select>
                 </div>
               </div>
@@ -158,10 +158,13 @@ export default function Searchtool() {
                       e.preventDefault()
                       setCriteria(e.target.value)
                     }} class=" form-select form-select-lg-3">
-                      <option value="all">--Category--</option>{" "}
+                      {categories.map((cat)=>{
+                        return <option value={cat.value}>{cat.text} {" "}</option>
+                      })}
+                      {/* <option value="all">--Category--</option>{" "}
                       <option value="fiction">Fiction</option>{" "}
                       <option value="news">News Editorials</option>{" "}
-                      <option value="academics">Academics</option>{" "}
+                      <option value="academics">Academics</option>{" "} */}
                     </select>
                   </div>
                   <div className="col-md-4"></div>

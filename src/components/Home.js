@@ -88,8 +88,8 @@ export default function Home() {
                     <div className="col-md-6 col-sm-6 p-5">
                         <div className="pt-3 border border-2 p-2 border-success pb-3">
                             <h6 className="p-3">
-                                PakLocCorp represents corpus of PakEng and this corpus is a collection of text from multiple genres and registers. There are currently 323 transcripts in total and 2.5 million words. These collections are a window to the variations of English. It contains words from magazines, newspapers, fiction, academic texts and research publications. This corpus is expanding and open to contribution. Researchers, academicians, scholars and policy makers may use this corpus. Moreover, you may also contribute relevant data. Data will be added after scrutiny by the team PakLocCorp.
-                                <br />
+                            PakLocCorp represents corpus of Pakistani English and this corpus is a collection of text from multiple genres and registers. There are currently 1184 files in total and 14,616,077 words. These collections are a window to the variations of English. It contains words from magazines, newspapers, fiction, academic texts and research publications. This corpus is expanding and open to contribution. Researchers, academicians, scholars and policy makers may use this corpus. Moreover, you may also contribute relevant data. Data will be added after scrutiny by the team PakLocCorp.
+ <br />
                                 This non-commercial research project is freely available for academic purposes. By downloading it, or using it online, you agree with the <span><Link to='/Terms'>Term and Conditions</Link></span>. User guide and tutorials are also available. This specialized corpus offers Urduized word list along with source reference for advance research and it is expanding. Scholars are also encouraged for contributions in the form of small or large corpus of local indigenous variety of English.
                             </h6>
                             <br />
@@ -179,7 +179,7 @@ export default function Home() {
                                             <th scope="col">Size</th>
                                             <th scope="col">Time</th>
                                             <th scope="col">Genre</th>
-                                            <th scope="col">Frequency (Urduised words)</th>
+                                            {/* <th scope="col">Frequency (Urduised words)</th> */}
                                         </tr>
                                     </thead>
                                     {showLoader === false && <tbody>
@@ -193,10 +193,11 @@ export default function Home() {
                                                 color: "blue",
                                                 textDecoration: "underline"
                                             }}>{toTitleCase(corp.name)}</td>
-                                            <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td>
+                                            {/* <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td> */}
+                                            <td>{corp.noOfWords + " words"}</td>
                                             <td>{corp.time}</td>
                                             <td>{corp.genre}</td>
-                                            <td>{corp.frequency + "%"}</td>
+                                            {/* <td>{corp.frequency + "%"}</td> */}
                                         </tr>)}
                                     </tbody>}
                                     {showLoader === true && <ColorRing
@@ -209,7 +210,7 @@ export default function Home() {
                                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                     />}
                                 </table>}
-                                {showFilesTable === true && selectedCategory === 'academics' &&
+                                {showFilesTable === true && selectedCategory === 'academic' &&
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -615,7 +616,7 @@ export default function Home() {
                                             <td><b>1370063</b></td>
                                         </tr>
                                     </table>}
-                                {showFilesTable === true && selectedCategory === 'news' &&
+                                {showFilesTable === true && selectedCategory === 'media' &&
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -2379,7 +2380,7 @@ export default function Home() {
                                             <td><b>283416</b></td>
                                         </tr>
                                     </table>}
-                                {showFilesTable === true && selectedCategory === 'fiction' &&
+                                {showFilesTable === true && selectedCategory === 'literary' &&
                                     <table className="table">
                                         <thead>
                                             <tr>
