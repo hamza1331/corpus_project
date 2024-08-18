@@ -7,7 +7,7 @@ import { ColorRing } from 'react-loader-spinner'
 import Copyright from "../components/Copyright";
 var _ = require('lodash');
 
-const Highlighted = ({text = '', highlight = ''}) => {
+const Highlighted = ({ text = '', highlight = '' }) => {
   if (!highlight.trim()) {
     return <span>{text}</span>
   }
@@ -15,10 +15,10 @@ const Highlighted = ({text = '', highlight = ''}) => {
   const parts = text.split(regex)
   return (
     <span>
-       {parts.filter(part => part).map((part, i) => (
-           regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
-       ))}
-   </span>
+      {parts.filter(part => part).map((part, i) => (
+        regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+      ))}
+    </span>
   )
 }
 export default function Sresult() {
@@ -36,6 +36,7 @@ export default function Sresult() {
   const [showLoader, setshowLoader] = useState(false)
   const [totalHits, setTotalHits] = useState(0)
   const [selectedFilename, setselectedFilename] = useState('')
+  const [fileText,setFileText] = useState("");
   React.useEffect(() => {
     getCorpusFiles();
     searchWord(page, WordSave, criteria)
@@ -96,6 +97,28 @@ export default function Sresult() {
         console.log(error);
       });
   };
+
+  const getFileText = async (item) => {
+    if (item.filePath) {
+      try {
+        setshowLoader(true)
+        const request = await fetch(`${url}/corpus/getFileText?filepath=${item.filePath}`)
+        const response = await request.json()
+        if (response.message === "Success") {
+          const {text} = response.doc
+          setFileText(text)
+          setshowLoader(false)
+        }
+        else{
+          setshowLoader(false)
+          alert(response.error)
+        }
+      } catch (error) {
+        setshowLoader(false)
+        alert(error)
+      }
+    }
+  }
   return (
     <div>
       <Bar />
@@ -113,6 +136,8 @@ export default function Sresult() {
                       return (
                         <tr
                           onClick={() => {
+                            setFileText("")
+                            getFileText(item)
                             SetData(item);
                             setScreenChange(false);
                             setselectedFilename(item.fileName)
@@ -148,6 +173,7 @@ export default function Sresult() {
                   e.preventDefault()
                   setScreenChange(true)
                   setselectedFilename('')
+                  setFileText("")
                 }}>Go Back</a>}
                 <h5 className="d-flex justify-content-center">{selectedFilename.length > 0 ? selectedFilename : "Search Results"}</h5>
                 <br />
@@ -167,14 +193,16 @@ export default function Sresult() {
                         return (
                           <tr>
                             <td>{index + 1}</td>
-                            <td><Highlighted text={a.complete} highlight={WordSave}/></td>
+                            <td><Highlighted text={a.complete} highlight={WordSave} /></td>
                           </tr>
                         );
                       })}
                     {ScreenChange === false && (
                       <tr>
                         {/* <td></td> */}
-                        <td>{Data.text}</td>
+                        {/* <td>{Data.text}</td> */}
+                        {fileText.length>0 && <td>{fileText}</td>}
+
                       </tr>
                     )}
                   </tbody>}
@@ -201,7 +229,7 @@ export default function Sresult() {
         </span>
       </footer> */}
 
-      <Copyright/>
+      <Copyright />
     </div>
   );
 }
