@@ -15,7 +15,7 @@ export default function List() {
   const [concordanceResults, setconcordanceResults] = useState([])
   const [descriptions, setdescriptions] = useState([])
   const searchConcordance = (des=[]) => {
-    console.log('desss-->',des)
+    // console.log('desss-->',des)
     if (abc.length > 0) {
       fetch(`${url}/corpus/findKWIC/1`, {
         method: "POST",
@@ -63,7 +63,7 @@ export default function List() {
         'Word forms: plural Chudries chodriyon',
         'Spelling variations: choudary, chodry']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else if (abc === 'Wahhabism') {
@@ -71,7 +71,7 @@ export default function List() {
         'Concordance: Wahhabism is often associated with', 'Usage in sentence: People talk less about Wahhabism. Wahhabism is more in practice in some areas than other school of thoughts.',
         'Meaning : a sect of Muslims', 'Grammatical category : noun', 'Word forms: Wahhaby, Wahabbies, wahabi-yon', 'Possible Spelling variations : Wahhaby, wahhabee']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else if (abc === 'dera') {
@@ -80,7 +80,7 @@ export default function List() {
         'Meaning : camp, mound or settlement', 'Grammatical category: Noun ', 'Word forms: dera, deray (plural)',
         'Possible Spelling variations : derah']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else if (abc === 'besan') {
@@ -122,7 +122,7 @@ export default function List() {
         'Meaning : clothing that covers head and/or face of women (muslim)', 'Grammatical category : Noun',
         'Word forms: hijaab', 'Possible Spelling variations : Hejab, hijaab']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else if (abc === 'imam') {
@@ -130,7 +130,7 @@ export default function List() {
         'Usage in sentence: Imam is now in the masjid.', 'Meaning : A person who is being followed while offering  prayer. He stands in front of everyone.', 'Grammatical category : Noun',
         'Word forms: imams , Imambargah', 'Possible Spelling variations:  imaam']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else if (abc === 'Jihadi') {
@@ -139,7 +139,7 @@ export default function List() {
         'Meaning:  Who is at war against non-muslims.', 'Grammatical category: Adjective',
         'Word forms: jihad,Jihadi,jihadis, jihadist,jihadists', 'Possible Spelling variations: Jihaadi, Jihady,jihadee']
       setdescriptions(arr)
-      searchConcordance()
+      searchConcordance(arr)
       setShowConcordance(true)
     }
     else {
@@ -205,7 +205,7 @@ export default function List() {
       audio.play();
     }
     else if(word==='dera'){
-      let src = 'https://firebasestorage.googleapis.com/v0/b/pakgentextweb.appspot.com/o/Besan.m4a?alt=media&token=7d3d4662-a409-4a60-abef-f250a2dfc69f'
+      let src = 'https://firebasestorage.googleapis.com/v0/b/pakgentextweb.appspot.com/o/dera.m4a?alt=media&token=dd2d37b5-8ff0-40da-b89a-ae95176ac657'
       const audio = new Audio(src);
       audio.loop = false;
       audio.play();
