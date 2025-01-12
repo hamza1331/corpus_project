@@ -9,7 +9,7 @@ export default function List() {
   const [finalDAta, setFinalData] = useState(null)
   const [selectedlist, setSelectedList] = useState(1)
   const [selectedPage, setSelectedPage] = useState(1)
-  const [word,setWord] = useState('')
+  const [word, setWord] = useState('')
   useEffect(() => {
     getUDWords()
   }, [])
@@ -46,24 +46,25 @@ export default function List() {
 
         </div>
         <br />
-              <h3 style={{fontWeight:'bold'}}>What is an Urduized word?</h3>
-              <p>
-              When a local Urdu word is inserted in English sentence, it gives meaning to the English text. Several scholars have used Urduized English (Baumgardener, 1993) or Urduized words to represent such insertions. Mehboob (2003) provided a complete list of 54 categories of borrowed words and Tallat (1993) discussed Urduized meaning of Pakistani English.
-              <br/>
-              Example sentences are given below:
-              <ol>
-                <li>
-                Edibles: At some time they again came to the haleem [a thick soup] shop on motorcycles and threw his two daigs [a cauldron].Mehboob (2003)
+        <h3 style={{ fontWeight: 'bold' }}>What is an Urduized word?</h3>
+        <p>
+          When a local Urdu word is inserted in English sentence, it gives meaning to the English text. Several scholars have used Urduized English (Baumgardener, 1993) or Urduized words to represent such insertions. Mehboob (2003) provided a complete list of 54 categories of borrowed words and Tallat (1993) discussed Urduized meaning of Pakistani English.
+          <br />
+          Example sentences are given below:
+          <ol>
+            <li>
+              Edibles: At some time they again came to the haleem [a thick soup] shop on motorcycles and threw his two daigs [a cauldron].Mehboob (2003)
 
-                </li>
-                <li>Ghizaayyat bakhsh full cream homogenized taazaa duudh. Baumgardener (1993)
-                </li>
-                <li>
-                Everyone in the world, it seems, is talking about the judge-sahib’s murder. Aslam (1993)
+            </li>
+            <li>Ghizaayyat bakhsh full cream homogenized taazaa duudh. Baumgardener (1993)
+            </li>
+            <li>
+              Everyone in the world, it seems, is talking about the judge-sahib’s murder. Aslam (1993)
 
-                </li>
-              </ol>
-              </p>
+            </li>
+          </ol>
+        </p>
+        <p>To access the list of Urduized words, <a href="https://firebasestorage.googleapis.com/v0/b/pakgentextweb.appspot.com/o/urduized%20words%20list%20a-z.xlsx?alt=media&token=3075882f-6e78-4843-81b4-3ba67157a846" target="_blank">Click Here</a></p>
         <div className="pt-4 d-flex justify-content-center">
           <div class="bg-white p-2 w-75 ">
             <div className="d-flex justify-content-center">
@@ -71,16 +72,16 @@ export default function List() {
                 placeholder="Search Word"
                 className="m-1 rounded border w-75"
                 value={word}
-                onChange={e=>setWord(e.target.value)}
+                onChange={e => setWord(e.target.value)}
               />
               <button
                 className="p-1 px-5 rounded border text-white"
                 style={{ backgroundColor: "#5db959" }}
-                onClick={e=>{
+                onClick={e => {
                   e.preventDefault()
-                  if(word.length>0)
-                  navigation('/Definition', { state: { value:word} })
-                  else{
+                  if (word.length > 0)
+                    navigation('/Definition', { state: { value: word } })
+                  else {
                     alert('Search Word can not be empty')
                   }
                 }}
@@ -166,20 +167,20 @@ export default function List() {
               <div>
                 <ul className="px-5 list-unstyled ">
                   <div className="justify-content-center px-5">
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(1)
                       setSelectedPage(1)
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===1?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===1?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 1 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 1 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 1</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(2)
                       setSelectedPage(1)
@@ -187,13 +188,13 @@ export default function List() {
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===2?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===2?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 2 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 2 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 2</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(3)
                       setSelectedPage(1)
@@ -201,13 +202,13 @@ export default function List() {
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===3?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===3?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 3 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 3 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 3</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(4)
                       setSelectedPage(1)
@@ -215,13 +216,13 @@ export default function List() {
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===4?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===4?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 4 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 4 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 4</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(5)
                       setSelectedPage(1)
@@ -229,13 +230,13 @@ export default function List() {
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===5?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===5?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 5 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 5 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 5</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(6)
                       setSelectedPage(1)
@@ -243,21 +244,21 @@ export default function List() {
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===6?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===6?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 6 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 6 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 6</strong>
                       </span>
                     </li>
-                    <li onClick={e=>{
+                    <li onClick={e => {
                       e.preventDefault()
                       setSelectedList(7)
                       setSelectedPage(1)
                     }} className="py-1">
                       <span
                         type="button"
-                        className={selectedlist===7?"btn btn-block px-5 text-white":"btn btn-block px-5"}
-                        style={{ backgroundColor: selectedlist===7?"#07255e":"#eeeeee" }}
+                        className={selectedlist === 7 ? "btn btn-block px-5 text-white" : "btn btn-block px-5"}
+                        style={{ backgroundColor: selectedlist === 7 ? "#07255e" : "#eeeeee" }}
                       >
                         <strong>List 7</strong>
                       </span>
@@ -286,7 +287,7 @@ export default function List() {
                         <span className="sr-only text-success">Previous</span>
                       </a>
                     </li>
-                    {finalDAta !== null && Array.from({ length: finalDAta[selectedlist-1].pages }, () => Math.round(Math.random() * 100)).map((val, ind) => <li className="page-item">
+                    {finalDAta !== null && Array.from({ length: finalDAta[selectedlist - 1].pages }, () => Math.round(Math.random() * 100)).map((val, ind) => <li className="page-item">
                       <a onClick={e => {
                         e.preventDefault()
                         setSelectedPage(ind + 1)
@@ -311,12 +312,12 @@ export default function List() {
 
               <ul className="list-unstyled">
                 <div className="" style={{ paddingLeft: '100px' }}>
-                  {finalDAta !== null && finalDAta[selectedlist-1].allData.sort((a, b) => a.localeCompare(b))
+                  {finalDAta !== null && finalDAta[selectedlist - 1].allData.sort((a, b) => a.localeCompare(b))
                     .slice((selectedPage * 7) - 7, selectedPage * 7).map((word) => <li className="py-2 worddd">
                       <strong>
-                        <a onClick={e=>{
+                        <a onClick={e => {
                           e.preventDefault()
-                          navigation('/Definition', { state: { value:word} })
+                          navigation('/Definition', { state: { value: word } })
                         }} className="wordddingg" style={{ color: "#216bbd" }}>{word}</a>
                       </strong>
                     </li>)}
