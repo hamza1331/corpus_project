@@ -1,40 +1,55 @@
 import React, { useState, useEffect } from "react";
 import Bar from "../components/Bar";
 import { useNavigate } from 'react-router-dom'
-import { url } from "../components/Variable";
+import { supabase } from '../supabaseClient'
 export default function List() {
   const navigation = useNavigate();
-  const [data, setData] = useState(null)
   const [pages, setPages] = useState(1)
   const [finalDAta, setFinalData] = useState(null)
   const [selectedlist, setSelectedList] = useState(1)
   const [selectedPage, setSelectedPage] = useState(1)
   const [word, setWord] = useState('')
   useEffect(() => {
-    getUDWords()
+    getWordsFromSupabase()
   }, [])
-  const getUDWords = async () => {
-    fetch(`${url}/corpus/getUdWords`)
-      .then(res => res.json())
-      .then(response => {
-        if (response.message === 'Success') {
-          // console.log('response--->', response.doc)
-          setData(response.doc)
-          let results = []
-          Object.values(response.doc).map((dataa, index) => {
-            // console.log('dataaaa '+index+'--->',dataa)
-            results.push({
-              list: index,
-              allData: dataa,
-              pages: Math.ceil(dataa.length / 7)
-            })
-          })
-          console.log('finalDAta--->', results)
-          setFinalData(results)
-          setPages(results[0].pages)
-        }
-      })
+  const getWordsFromSupabase = async () => {
+    try {
+      const { data: rows, error } = await supabase
+        .from('urduized_words')
+        .select('word')
+        .order('word', { ascending: true })
+
+      if (error) throw error
+
+      const words = (rows || []).map(r => r.word).filter(Boolean)
+
+      const numLists = 7
+      const itemsPerPage = 7
+      const perList = Math.ceil((words.length || 0) / numLists) || 1
+      const results = []
+      for (let i = 0; i < numLists; i++) {
+        const start = i * perList
+        const end = start + perList
+        const listWords = words.slice(start, end)
+        results.push({
+          list: i + 1,
+          allData: listWords,
+          pages: Math.ceil((listWords.length || 0) / itemsPerPage) || 1
+        })
+      }
+      setFinalData(results)
+      setPages(results[0]?.pages || 1)
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to load words from Supabase', e)
+    }
   }
+
+  useEffect(() => {
+    if (finalDAta && finalDAta[selectedlist - 1]) {
+      setPages(finalDAta[selectedlist - 1].pages)
+    }
+  }, [finalDAta, selectedlist])
   return (
     <div>
       <div className="container">
@@ -80,7 +95,7 @@ export default function List() {
                 onClick={e => {
                   e.preventDefault()
                   if (word.length > 0)
-                    navigation('/Definition', { state: { value: word } })
+                    navigation(`/word/${encodeURIComponent(word)}`)
                   else {
                     alert('Search Word can not be empty')
                   }
@@ -287,7 +302,7 @@ export default function List() {
                         <span className="sr-only text-success">Previous</span>
                       </a>
                     </li>
-                    {finalDAta !== null && Array.from({ length: finalDAta[selectedlist - 1].pages }, () => Math.round(Math.random() * 100)).map((val, ind) => <li className="page-item">
+                    {finalDAta !== null && Array.from({ length: finalDAta[selectedlist - 1].pages }, () => Math.round(Math.random() * 100)).map((val, ind) => <li className="page-item" key={`page-${ind}`}>
                       <a onClick={e => {
                         e.preventDefault()
                         setSelectedPage(ind + 1)
@@ -313,11 +328,11 @@ export default function List() {
               <ul className="list-unstyled">
                 <div className="" style={{ paddingLeft: '100px' }}>
                   {finalDAta !== null && finalDAta[selectedlist - 1].allData.sort((a, b) => a.localeCompare(b))
-                    .slice((selectedPage * 7) - 7, selectedPage * 7).map((word) => <li className="py-2 worddd">
+                    .slice((selectedPage * 7) - 7, selectedPage * 7).map((word) => <li className="py-2 worddd" key={`w-${word}`}>
                       <strong>
                         <a onClick={e => {
                           e.preventDefault()
-                          navigation('/Definition', { state: { value: word } })
+                          navigation(`/word/${encodeURIComponent(word)}`)
                         }} className="wordddingg" style={{ color: "#216bbd" }}>{word}</a>
                       </strong>
                     </li>)}
