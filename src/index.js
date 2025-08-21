@@ -10,6 +10,7 @@ import Concordance from "./pages/Concordance";
 import Kwic from "./pages/Kwic";
 import List from "./pages/List";
 import Listresult from "./pages/Listresult";
+import WordDetail from './pages/WordDetail'
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Publication from "./pages/Publication";
@@ -52,6 +53,7 @@ root.render(
         <Route path="/Kwic" element={<Kwic />} />
         <Route path="/List" element={<List />} />
         <Route path="/Listresult" element={<Listresult/>} />
+        <Route path="/word/:word" element={<WordDetail />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
