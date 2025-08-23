@@ -17,8 +17,8 @@ export default function WordDetail() {
   // Concordance state variables
   const [data, setData] = useState([])
   const [collocationData, setCollocationData] = useState([])
-  const [LN, setLN] = useState(4)
-  const [RN, setRN] = useState(4)
+  const [LN, setLN] = useState(5)
+  const [RN, setRN] = useState(5)
   const [page, setpage] = useState(1)
   const [showText, setshowText] = useState(false)
   const [filepath, setfilepath] = useState('')
@@ -107,8 +107,8 @@ export default function WordDetail() {
         body: JSON.stringify({
           word: word,
           criteria: criteria !== '' ? criteria : "all",
-          LN: 1,
-          RN: 1
+          LN: 2,
+          RN: 2
         })
       }).then(res => res.json())
         .then((response) => {
