@@ -328,14 +328,26 @@ export default function List() {
               <ul className="list-unstyled">
                 <div className="" style={{ paddingLeft: '100px' }}>
                   {finalDAta !== null && finalDAta[selectedlist - 1].allData.sort((a, b) => a.localeCompare(b))
-                    .slice((selectedPage * 7) - 7, selectedPage * 7).map((word) => <li className="py-2 worddd" key={`w-${word}`}>
-                      <strong>
-                        <a onClick={e => {
-                          e.preventDefault()
-                          navigation(`/word/${encodeURIComponent(word)}`)
-                        }} className="wordddingg" style={{ color: "#216bbd" }}>{word}</a>
-                      </strong>
-                    </li>)}
+                    .slice((selectedPage * 7) - 7, selectedPage * 7).map((word, index) => {
+                      // Calculate overall position across all lists
+                      let overallPosition = 0
+                      for (let i = 0; i < selectedlist - 1; i++) {
+                        overallPosition += finalDAta[i].allData.length
+                      }
+                      overallPosition += (selectedPage * 7) - 7 + index + 1
+                      
+                      return (
+                        <li className="py-2 worddd" key={`w-${word}`}>
+                          <strong>
+                            <span style={{ marginRight: '10px', color: '#666' }}>{overallPosition}.</span>
+                            <a onClick={e => {
+                              e.preventDefault()
+                              navigation(`/word/${encodeURIComponent(word)}`)
+                            }} className="wordddingg" style={{ color: "#216bbd" }}>{word}</a>
+                          </strong>
+                        </li>
+                      )
+                    })}
                 </div>
               </ul>
             </div>

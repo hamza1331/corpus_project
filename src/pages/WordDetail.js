@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Bar from '../components/Bar'
 import { supabase } from '../supabaseClient'
 import { url } from '../components/Variable'
+import Pagination from '@mui/material/Pagination';
+import { ColorRing } from 'react-loader-spinner'
 
 export default function WordDetail() {
   const { word: routeWord } = useParams()
@@ -11,7 +13,20 @@ export default function WordDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [wordData, setWordData] = useState(null)
-  const [concordanceResults, setConcordanceResults] = useState([])
+  
+  // Concordance state variables
+  const [data, setData] = useState([])
+  const [collocationData, setCollocationData] = useState([])
+  const [LN, setLN] = useState(4)
+  const [RN, setRN] = useState(4)
+  const [page, setpage] = useState(1)
+  const [showText, setshowText] = useState(false)
+  const [filepath, setfilepath] = useState('')
+  const [fileText, setfileText] = useState('')
+  const [numberOfPages, setnumberOfPages] = useState(1)
+  const [showLoader, setshowLoader] = useState(false)
+  const [totalHits, setTotalHits] = useState(0)
+  const [fileCount, setFileCount] = useState(0)
 
   useEffect(() => {
     setWord(routeWord || '')
@@ -29,20 +44,10 @@ export default function WordDetail() {
         if (error) throw error
         setWordData(data)
 
-        // Fetch KWIC concordance from existing API
+        // Search concordance on component mount
         if (routeWord) {
-          const res = await fetch(`${url}/corpus/findKWIC/1`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({ word: routeWord, criteria: 'all' })
-          })
-          const json = await res.json()
-          if (json?.message === 'Success' && json?.doc?.results?.length) {
-            setConcordanceResults(json.doc.results)
-          }
+          searchConcordance(LN, RN, routeWord, 'all', 1)
+          searchCollocation(2, 2, routeWord, 'all', 1)
         }
       } catch (err) {
         setError(err?.message || 'Failed to load word')
@@ -53,6 +58,76 @@ export default function WordDetail() {
 
     fetchData()
   }, [routeWord])
+
+  const searchConcordance = async (left = LN, right = RN, word = routeWord, criteria = '', page = 1) => {
+    if (word) {
+      setshowLoader(true)
+      fetch(`${url}/corpus/searchConcordance/${page}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          word: word,
+          criteria: criteria !== '' ? criteria : "all",
+          LN: left,
+          RN: right
+        })
+      }).then(res => res.json())
+        .then((response) => {
+          setshowLoader(false)
+          if (response.message === 'Success') {
+            // console.log('response--->', response.doc)
+            setData(response.doc.occurrence);
+            setnumberOfPages(response.doc.numberOfPages)
+            setTotalHits(response.doc.count)
+            setFileCount(response?.doc?.fileCount)
+          }
+        })
+        .catch((error) => {
+          setshowLoader(false)
+          console.log(error);
+        });
+    }
+    else {
+      alert('You must type a word to search results')
+    }
+  }
+
+  const searchCollocation = async (left = LN, right = RN, word = routeWord, criteria = '', page = 1) => {
+    if (word) {
+      setshowLoader(true)
+      fetch(`${url}/corpus/searchConcordance/${page}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          word: word,
+          criteria: criteria !== '' ? criteria : "all",
+          LN: 1,
+          RN: 1
+        })
+      }).then(res => res.json())
+        .then((response) => {
+          setshowLoader(false)
+          if (response.message === 'Success') {
+            // console.log('response--->', response.doc)
+            setCollocationData(response.doc.occurrence);
+            // setTotalHits(response.doc.count)
+          }
+        })
+        .catch((error) => {
+          setshowLoader(false)
+          console.log(error);
+        });
+    }
+    else {
+      alert('You must type a word to search results')
+    }
+  }
 
   const handlePlay = (src) => {
     if (!src) return
@@ -92,11 +167,8 @@ export default function WordDetail() {
           Go Back
         </button>
         <br />
-        <div className="container row">
+        <div className="container row details">
           &nbsp;
-          <div style={{ color: '#b03e41' }}>
-            <h4>Definition of '{word}'</h4>
-          </div>
           <div className="float-start col-md-10 col-sm-10">
             <br />
             <h2>
@@ -152,29 +224,186 @@ export default function WordDetail() {
           </div>
         </div>
 
-        {concordanceResults.length > 0 && (
-          <table className="table">
-            <thead>
-              <h2 style={{ textAlign: 'center' }}>Concordance</h2>
-              <tr>
-                <th scope="col">Text From File</th>
-                <th scope="col">Left Text</th>
-                <th scope="col">Center Word</th>
-                <th scope="col">Right Text</th>
-              </tr>
-            </thead>
-            <tbody>
-              {concordanceResults.map((item, index) => (
-                <tr key={`${item.filename}-${index}`}>
-                  <th scope="row">{item.filename}</th>
-                  <td>{item.preText}</td>
-                  <td>{word}</td>
-                  <td>{item.postText}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        {/* Concordance Section */}
+        <div style={{ backgroundColor: "#f0faef", height: "100%" }}>
+          <div className="container">
+            <div className="d-flex justify-content-center p-2 pt-5 pb-5">
+              <div className="col-md-10 col-sm-10 bg-white d-flex justify-content-center">
+                <div className="container">
+                  <br />
+                  <div className="justify-content-center">
+                    <div className="container row">
+                      <div className="col-md-3"></div>
+                      <div className="col-md-3">
+                        <label className="d-flex justify-content-center">
+                          <strong>Left Word Number:</strong>
+                        </label>
+                        <select onChange={e => {
+                          if (e.target.value !== 'all') {
+                            setLN(parseInt(e.target.value))
+                          }
+                        }} className="form-select form-select-lg-3">
+                          <option value="all">--Select Number--</option>{" "}
+                          <option value="1">1</option>{" "}
+                          <option value="2">2</option>{" "}
+                          <option value="3">3</option>{" "}
+                          <option value="4">4</option>{" "}
+                          <option value="5">5</option>{" "}
+                          <option value="6">6</option>{" "}
+                          <option value="7">7</option>{" "}
+                          <option value="8">8</option>{" "}
+                          <option value="9">9</option>{" "}
+                          <option value="10">10</option>{" "}
+                        </select>
+                      </div>
+                      <div className="col-md-3">
+                        <label className=" d-flex justify-content-center">
+                          <strong>Right Word Number:</strong>
+                        </label>
+                        <select onChange={(e) => {
+                          if (e.target.value !== 'all') {
+                            setRN(parseInt(e.target.value))
+                          }
+                        }} className=" form-select form-select-lg-3">
+                          <option value="all">--Select Number--</option>{" "}
+                          <option value="1">1</option>{" "}
+                          <option value="2">2</option>{" "}
+                          <option value="3">3</option>{" "}
+                          <option value="4">4</option>{" "}
+                          <option value="5">5</option>{" "}
+                          <option value="6">6</option>{" "}
+                          <option value="7">7</option>{" "}
+                          <option value="8">8</option>{" "}
+                          <option value="9">9</option>{" "}
+                          <option value="10">10</option>{" "}
+                        </select>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="col-md-4 pt-4">
+                          <button
+                            onClick={e => {
+                              e.preventDefault()
+                              searchConcordance(LN, RN)
+                            }}
+                            className="rounded border text-white form-control"
+                            style={{ backgroundColor: "#5db959" }}
+                          >
+                            Sort
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Dual Table Layout */}
+          <div className="container">
+            <div className="row">
+              {/* Main Concordance Table - Left Side */}
+              <div className="col-md-8">
+                <div className="p-3">
+                  <div style={{ display: "flex", justifyContent: 'space-between', marginBottom: '15px' }}>
+                    <div>
+                      <p>Word: <strong className="text-danger"> {word}</strong></p>
+                      <p>Total Hits: <strong className="text-danger"> {totalHits}</strong></p>
+                      <p>Total Files: <strong className="text-danger"> {fileCount}</strong></p>
+                    </div>
+                    <Pagination count={numberOfPages} page={page} color="primary"
+                      onChange={(e, value) => {
+                        setpage(value)
+                        setshowLoader(true)
+                        searchConcordance(LN, RN, word, 'all', value)
+                      }} />
+                  </div>
+                  <div className="pt-3 border border-2 p-2 border-success pb-3">
+                    <h3 className="d-flex justify-content-center">Concordance</h3>
+                    <br />
+                    {showLoader === false && (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table className="table" style={{ minWidth: '800px' }}>
+                          <thead>
+                            <tr>
+                              <th scope="col">Sr.</th>
+                              <th scope="col">Filename</th>
+                              <th scope="col">Left Text</th>
+                              <th scope="col">Center Word</th>
+                              <th scope="col">Right Text</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data.length > 0 && data.map((doc, index) => <tr key={`concordance-${index}`}>
+                              <th scope="row">{index + 1}</th>
+                              <td>{doc.filename || '—'}</td>
+                              <td>{doc.preText}</td>
+                              <td style={{ color: 'red', fontWeight: 'bold' }}><b>{word && word}</b></td>
+                              <td>{doc.postText}</td>
+                            </tr>)}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                    {showLoader === true && <ColorRing
+                      visible={showLoader}
+                      height="80"
+                      width="80"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{ marginLeft: '50%' }}
+                      wrapperClass="blocks-wrapper"
+                      colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />}
+                  </div>
+                </div>
+              </div>
+
+              {/* Collocation Table - Right Side */}
+              <div className="col-md-4">
+                <div className="p-3">
+                  <div className="pt-3 border border-2 p-2 border-success pb-3">
+                    <h3 className="d-flex justify-content-center">Collocation</h3>
+                    <br />
+                    {showLoader === false && (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table className="table" style={{ minWidth: '400px' }}>
+                          <thead>
+                            <tr>
+                              <th scope="col">Sr.</th>
+                              <th scope="col">Filename</th>
+                              <th scope="col">Left Text</th>
+                              <th scope="col">Center Word</th>
+                              <th scope="col">Right Text</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {collocationData.length > 0 && collocationData.slice(0, 5).map((doc, index) => <tr key={`collocation-${index}`}>
+                              <th scope="row">{index + 1}</th>
+                              <td>{doc.filename || '—'}</td>
+                              <td>{doc.preText}</td>
+                              <td style={{ color: 'red', fontWeight: 'bold' }}><b>{word && word}</b></td>
+                              <td>{doc.postText}</td>
+                            </tr>)}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                    {showLoader === true && <ColorRing
+                      visible={showLoader}
+                      height="80"
+                      width="80"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{ marginLeft: '50%' }}
+                      wrapperClass="blocks-wrapper"
+                      colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <br />
         <span style={{ color: '#b03e41' }}>
