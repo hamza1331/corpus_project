@@ -158,6 +158,7 @@ export default function WordDetail() {
     <div>
       <Bar />
       <div className="container">
+        <div className="small">
         <br />
         <button
           onClick={(e) => { e.preventDefault(); navigate('/Search') }}
@@ -167,11 +168,10 @@ export default function WordDetail() {
           Go Back
         </button>
         <br />
-        <div className="container row details">
+        <div className="container row details card card-body shadow-sm mb-3" style={{ border: '1px solid #e9ecef' }}>
           &nbsp;
           <div className="float-start col-md-10 col-sm-10">
-            <br />
-            <h2>
+            <h4 className="mb-2">
               {word}
               {"    "}
               {wordData?.voice_link && (
@@ -184,8 +184,7 @@ export default function WordDetail() {
                   ></i>{' '}
                 </span>
               )}
-              <br />
-              <div>
+              <div className="mt-2" style={{ lineHeight: 1.4 }}>
                 <p>
                   <strong><span style={{ color: '#b03e41' }}>Grammatical category:</span></strong>{' '}
                   <span>{wordData?.part_of_speech || '—'}</span>
@@ -204,7 +203,7 @@ export default function WordDetail() {
                 {(wordData?.related_words?.length || 0) > 0 && (
                   <div>
                     <strong><span style={{ color: '#b03e41' }}>Collocates:</span></strong>
-                    <ul style={{ marginTop: 6 }}>
+                    <ul style={{ marginTop: 6, columns: 2, columnGap: 24 }}>
                       {wordData.related_words.slice(0, 10).map((rw, idx) => (
                         <li key={idx}>{rw}</li>
                       ))}
@@ -220,14 +219,14 @@ export default function WordDetail() {
                   )}
                 </div>
               </div>
-            </h2>
+            </h4>
           </div>
         </div>
-
+ 
         {/* Concordance Section */}
-        <div style={{ backgroundColor: "#f0faef", height: "100%" }}>
+        <div style={{ backgroundColor: "#f8f9fa", height: "100%" }}>
           <div className="container">
-            <div className="d-flex justify-content-center p-2 pt-5 pb-5">
+            <div className="d-flex justify-content-center p-2 pt-3 pb-3">
               <div className="col-md-10 col-sm-10 bg-white d-flex justify-content-center">
                 <div className="container">
                   <br />
@@ -235,14 +234,14 @@ export default function WordDetail() {
                     <div className="container row">
                       <div className="col-md-3"></div>
                       <div className="col-md-3">
-                        <label className="d-flex justify-content-center">
+                        <label className="d-flex justify-content-center mb-1" style={{ fontSize: '0.9rem' }}>
                           <strong>Left Word Number:</strong>
                         </label>
                         <select onChange={e => {
                           if (e.target.value !== 'all') {
                             setLN(parseInt(e.target.value))
                           }
-                        }} className="form-select form-select-lg-3">
+                        }} className="form-select form-select-sm">
                           <option value="all">--Select Number--</option>{" "}
                           <option value="1">1</option>{" "}
                           <option value="2">2</option>{" "}
@@ -257,14 +256,14 @@ export default function WordDetail() {
                         </select>
                       </div>
                       <div className="col-md-3">
-                        <label className=" d-flex justify-content-center">
+                        <label className=" d-flex justify-content-center mb-1" style={{ fontSize: '0.9rem' }}>
                           <strong>Right Word Number:</strong>
                         </label>
                         <select onChange={(e) => {
                           if (e.target.value !== 'all') {
                             setRN(parseInt(e.target.value))
                           }
-                        }} className=" form-select form-select-lg-3">
+                        }} className=" form-select form-select-sm">
                           <option value="all">--Select Number--</option>{" "}
                           <option value="1">1</option>{" "}
                           <option value="2">2</option>{" "}
@@ -279,21 +278,20 @@ export default function WordDetail() {
                         </select>
                       </div>
                       <div className="col-md-3">
-                        <div className="col-md-4 pt-4">
+                        <div className="col-md-6 pt-3">
                           <button
                             onClick={e => {
                               e.preventDefault()
                               searchConcordance(LN, RN)
                             }}
-                            className="rounded border text-white form-control"
-                            style={{ backgroundColor: "#5db959" }}
+                            className="btn btn-success btn-sm w-100"
                           >
                             Sort
                           </button>
                         </div>
                       </div>
                     </div>
-                    <br />
+                    <div className="mt-1" />
                   </div>
                 </div>
               </div>
@@ -305,26 +303,26 @@ export default function WordDetail() {
             <div className="row">
               {/* Main Concordance Table - Left Side */}
               <div className="col-md-8">
-                <div className="p-3">
+                <div className="p-2 card shadow-sm">
                   <div style={{ display: "flex", justifyContent: 'space-between', marginBottom: '15px' }}>
                     <div>
                       <p>Word: <strong className="text-danger"> {word}</strong></p>
                       <p>Total Hits: <strong className="text-danger"> {totalHits}</strong></p>
                       <p>Total Files: <strong className="text-danger"> {fileCount}</strong></p>
                     </div>
-                    <Pagination count={numberOfPages} page={page} color="primary"
+                    <Pagination size="small" count={numberOfPages} page={page} color="primary"
                       onChange={(e, value) => {
                         setpage(value)
                         setshowLoader(true)
                         searchConcordance(LN, RN, word, 'all', value)
                       }} />
                   </div>
-                  <div className="pt-3 border border-2 p-2 border-success pb-3">
-                    <h3 className="d-flex justify-content-center">Concordance</h3>
+                  <div className="pt-2 border border-2 p-2 border-success pb-2 rounded">
+                    <h5 className="d-flex justify-content-center m-0">Concordance</h5>
                     <br />
                     {showLoader === false && (
-                      <div style={{ overflowX: 'auto' }}>
-                        <table className="table" style={{ minWidth: '800px' }}>
+                      <div className="table-responsive">
+                        <table className="table table-sm table-striped table-hover align-middle" style={{ minWidth: '700px' }}>
                           <thead>
                             <tr>
                               <th scope="col">Sr.</th>
@@ -358,16 +356,18 @@ export default function WordDetail() {
                   </div>
                 </div>
               </div>
-
+ 
               {/* Collocation Table - Right Side */}
               <div className="col-md-4">
-                <div className="p-3">
-                  <div className="pt-3 border border-2 p-2 border-success pb-3">
-                    <h3 className="d-flex justify-content-center">Collocation</h3>
+                <div className="p-2 card shadow-sm">
+                  <div className="pt-2 border border-2 p-2 border-success pb-2 rounded">
+                    <h5 className="d-flex justify-content-center m-0">Collocation</h5>
+                    <p className="text-center text-muted small">Fixed: 2 left/right words, 5 results</p>
+                    <p className="text-center">Files: <strong className="text-danger"> {fileCount}</strong></p>
                     <br />
                     {showLoader === false && (
-                      <div style={{ overflowX: 'auto' }}>
-                        <table className="table" style={{ minWidth: '400px' }}>
+                      <div className="table-responsive">
+                        <table className="table table-sm table-striped table-hover align-middle" style={{ minWidth: '360px' }}>
                           <thead>
                             <tr>
                               <th scope="col">Sr.</th>
@@ -404,14 +404,15 @@ export default function WordDetail() {
             </div>
           </div>
         </div>
-
+ 
         <br />
         <span style={{ color: '#b03e41' }}>
           PakLocCorp. Copyrights &copy; pakloccorp.com
         </span>
+        </div>
       </div>
     </div>
-  )
-}
+    )
+  }
 
 
