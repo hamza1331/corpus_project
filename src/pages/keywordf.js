@@ -10,7 +10,7 @@ export default function Keywordf() {
   const loction = useLocation();
 
   // console.log("location", loction);
-  const criteria = loction.state?.criteria
+  const dirPath = loction.state?.dirPath || ''
   const [ScreenChange, setScreenChange] = useState(true);
   const [File, setFile] = useState([]);
   const [Data, SetData] = useState({});
@@ -26,30 +26,30 @@ export default function Keywordf() {
     getCorpusFiles()
   },[])
   const getCorpusFiles = async (e) => {
-    // setIsLoading(true)
-    // console.log('criteria--->',criteria)
-    fetch(`${url}/corpus/corpusFiles/${criteria !== undefined ? criteria : "all"}`)
+    const params = new URLSearchParams()
+    if (dirPath) {
+      params.append('dirPath', dirPath)
+    }
+    fetch(`${url}/corpus-management/directory/contents?${params.toString()}`)
       .then((res) => res.json())
       .then((response) => {
         console.log("Files received search word --->", response);
-        // after
-        if (response.message === "Success") {
-          // setIsLoading(false
-          setFile(response.doc);
-          // setData(response.doc);
+        if (response.message === "Success" && response.doc && Array.isArray(response.doc.contents)) {
+          const onlyFiles = response.doc.contents.filter(item => item.type === 'file')
+          setFile(onlyFiles);
         }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const getFileFrequency = (fileName='')=>{
+  const getFileFrequency = (filePath='')=>{
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
     
-    fetch(url+"/corpus/fileWordFrequency?filepath="+fileName, requestOptions)
+    fetch(url+"/corpus-management/file/word-frequency?filePath="+encodeURIComponent(filePath), requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('frequency ----> ',result)
@@ -77,12 +77,12 @@ export default function Keywordf() {
                       return (
                         <tr
                           onClick={() => {
-                            setselectedFilename(item.fileName)
-                            getFileFrequency(item.fileName)
+                            setselectedFilename(item.name)
+                            getFileFrequency(item.path)
                             setselectedFileIndex(index)
                           }}
                         >
-                          <td style={{backgroundColor:selectedFileIndex===index?"lightblue":"transparent"}}>{item.fileName}</td>
+                          <td style={{backgroundColor:selectedFileIndex===index?"lightblue":"transparent"}}>{item.name}</td>
                         </tr>
                       );
                     })}
