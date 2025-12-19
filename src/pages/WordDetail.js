@@ -62,7 +62,7 @@ export default function WordDetail() {
   const searchConcordance = async (left = LN, right = RN, word = routeWord, criteria = '', page = 1) => {
     if (word) {
       setshowLoader(true)
-      fetch(`${url}/corpus/searchConcordance/${page}`, {
+      fetch(`${url}/corpus-management/search/concordance/${page}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -71,6 +71,7 @@ export default function WordDetail() {
         body: JSON.stringify({
           word: word,
           criteria: criteria !== '' ? criteria : "all",
+          dirPath: '',
           LN: left,
           RN: right
         })
@@ -98,7 +99,7 @@ export default function WordDetail() {
   const searchCollocation = async (left = LN, right = RN, word = routeWord, criteria = '', page = 1) => {
     if (word) {
       setshowLoader(true)
-      fetch(`${url}/corpus/searchConcordance/${page}`, {
+      fetch(`${url}/corpus-management/search/concordance/${page}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -107,6 +108,7 @@ export default function WordDetail() {
         body: JSON.stringify({
           word: word,
           criteria: criteria !== '' ? criteria : "all",
+          dirPath: '',
           LN: 2,
           RN: 2
         })
