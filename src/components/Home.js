@@ -18,6 +18,7 @@ export default function Home() {
     const [showCat2, setShowCat2] = useState(false)
     const [categories2, setcategories2] = useState([])
     const [cat2Index,setCat2index] = useState(-1)
+    const [folders, setFolders] = useState([])
     const toTitleCase = (str) => {
         return str.replace(
             /\w\S*/g,
@@ -38,11 +39,48 @@ export default function Home() {
             })
     }, [])
 
+    useEffect(() => {
+        // Load corpus directory tree and flatten to folders for homepage dynamic list
+        fetch(`${url}/corpus-management/structure`)
+            .then(res => res.json())
+            .then(response => {
+                if (response.message === 'Success' && response.doc && Array.isArray(response.doc.structure)) {
+                    const flat = []
+
+                    const walk = (items, prefix = '') => {
+                        items.forEach(item => {
+                            if (item.type === 'directory') {
+                                const path = item.path || (prefix ? `${prefix}/${item.name}` : item.name)
+                                const filesCount = (item.children || []).filter(c => c.type === 'file').length
+                                flat.push({
+                                    label: path || '/',
+                                    value: path,
+                                    name: item.name,
+                                    children: item.children || [],
+                                    filesCount
+                                })
+                                if (item.children && item.children.length > 0) {
+                                    walk(item.children, path)
+                                }
+                            }
+                        })
+                    }
+
+                    walk(response.doc.structure)
+                    setFolders(flat)
+                }
+            })
+            .catch(err => console.log('Failed to load corpus structure', err))
+    }, [])
+
     const navigation = useNavigate();
     const Searchword = async (e) => {
         // setIsLoading(true)
-        if (Word.length > 0) {
-            navigation('/Sresult', { state: { Word: Word, criteria: categories[selectedIndex].value } })
+            if (Word.length > 0) {
+            // prefer explicit selection (`selectedCategory`) if set (e.g., user clicked a main-row),
+            // otherwise use the selected index from the categories panel (folders or legacy categories)
+            const dirPath = selectedCategory || (folders.length > 0 ? (folders[selectedIndex] && folders[selectedIndex].value) : (categories[selectedIndex] && categories[selectedIndex].value))
+            navigation('/Sresult', { state: { Word: Word, dirPath } })
 
         }
         else {
@@ -112,19 +150,30 @@ export default function Home() {
                                             }}
                                             className="bg-white border border-2 border-black"
                                         >
-                                            {categories.map((cat, ind) => {
-                                                return <option style={{ backgroundColor: selectedIndex === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
+                                            {(folders.length > 0 ? folders : categories).map((cat, ind) => {
+                                                const usingFolders = folders.length > 0
+                                                const hasChildren = Array.isArray(cat.children) && cat.children.length > 0
+                                                return <option key={ind} style={{ backgroundColor: selectedIndex === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
                                                     e.preventDefault()
                                                     setselectedIndex(ind)
-                                                    if (cat.children.length > 0) {
-                                                        setcategories2(cat.children)
-                                                        setShowCat2(true)
-                                                    }
-                                                    else{
-                                                        setcategories2([])
+                                                    if (usingFolders) {
+                                                        // only select path, do not expand or show internal files
+                                                        setselectedCategory(cat.value || cat.path || cat.label || cat.name)
                                                         setShowCat2(false)
+                                                        setcategories2([])
+                                                    } else {
+                                                        if (hasChildren) {
+                                                            setcategories2(cat.children)
+                                                            setShowCat2(true)
+                                                        }
+                                                        else{
+                                                            setcategories2([])
+                                                            setShowCat2(false)
+                                                        }
                                                     }
-                                                }} value={cat.value}>{cat.text}</option>
+                                                }} value={cat.value || cat.path || cat.name}>{/* value kept for compatibility */}
+                                                    {cat.label ? cat.label : (cat.text ? cat.text : cat.name)}
+                                                </option>
                                             })}
                                         </Scrollbars>
                                     </div>
@@ -143,12 +192,11 @@ export default function Home() {
                                             className="bg-white border border-2 border-black"
                                         >
                                             {categories2.length > 0 && categories2.map((cat, ind) => {
-                                                return <option style={{ backgroundColor: cat2Index === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
-                                                    e.preventDefault()
-                                                    // setselectedIndex(ind)
-                                                    setCat2index(ind)
-                                                }} value={cat.value}>{cat.text}</option>
-                                            })}
+                                                    return <option style={{ backgroundColor: cat2Index === ind ? "lightblue" : "transparent", padding: 5 }} onClick={e => {
+                                                        e.preventDefault()
+                                                        setCat2index(ind)
+                                                    }} value={cat.value || cat.path}>{cat.label ? cat.label : (cat.text ? cat.text : cat.name)}</option>
+                                                })}
                                         </Scrollbars>
                                     </div>
                                 </div>}
@@ -183,7 +231,23 @@ export default function Home() {
                                         </tr>
                                     </thead>
                                     {showLoader === false && <tbody>
-                                        {data.length > 0 && data.map((corp) => <tr>
+                                        { /* If folders fetched, render them dynamically; otherwise fallback to existing `data` */ }
+                                        {folders.length > 0 ? folders.map((f) => (
+                                            <tr key={f.value}>
+                                                <td onClick={e => {
+                                                    e.preventDefault()
+                                                    // store selection but do not expand or show internal files
+                                                    setselectedCategory(f.value)
+                                                }} style={{
+                                                    color: "blue",
+                                                    textDecoration: "underline",
+                                                    cursor: 'pointer'
+                                                }}>{toTitleCase(f.label)}</td>
+                                                <td>{f.filesCount ? `${f.filesCount} files` : ''}</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        )) : (data.length > 0 && data.map((corp) => <tr key={corp.name}>
                                             <td onClick={e => {
                                                 e.preventDefault()
                                                 setselectedCategory(corp.name.toLowerCase())
@@ -191,14 +255,13 @@ export default function Home() {
 
                                             }} style={{
                                                 color: "blue",
-                                                textDecoration: "underline"
+                                                textDecoration: "underline",
+                                                cursor: 'pointer'
                                             }}>{toTitleCase(corp.name)}</td>
-                                            {/* <td>{corp.noOfWords + " words (" + corp.size + " sentences)"}</td> */}
                                             <td>{corp.noOfWords + " words"}</td>
                                             <td>{corp.time}</td>
                                             <td>{corp.genre}</td>
-                                            {/* <td>{corp.frequency + "%"}</td> */}
-                                        </tr>)}
+                                        </tr>))}
                                     </tbody>}
                                     {showLoader === true && <ColorRing
                                         visible={showLoader}
@@ -210,6 +273,7 @@ export default function Home() {
                                         colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                                     />}
                                 </table>}
+                                {/* folder children are intentionally not expanded on selection; search will use selected folder as `dirPath` */}
                                 {showFilesTable === true && selectedCategory === 'academic' &&
                                     <table className="table">
                                         <thead>

@@ -1,17 +1,49 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { url } from '../components/Variable'
-import { categories } from '../components/categories';
 export default function Searchtool() {
   const navigation = useNavigate();
   const [Word, setWord] = useState('');
-  const [criteria, setCriteria] = useState('all')
+  const [folders, setFolders] = useState([])
+  const [dirPath, setDirPath] = useState('')
+
+  useEffect(() => {
+    // Load corpus directory tree from new corpus manager and flatten to options
+    fetch(`${url}/corpus-management/structure`)
+      .then(res => res.json())
+      .then(response => {
+        if (response.message === 'Success' && response.doc && Array.isArray(response.doc.structure)) {
+          const flat = []
+
+          const walk = (items, prefix = '') => {
+            items.forEach(item => {
+              if (item.type === 'directory') {
+                const path = item.path || (prefix ? `${prefix}/${item.name}` : item.name)
+                flat.push({
+                  label: path || '/',
+                  value: path,
+                })
+                if (item.children && item.children.length > 0) {
+                  walk(item.children, path)
+                }
+              }
+            })
+          }
+
+          walk(response.doc.structure)
+          setFolders(flat)
+        }
+      })
+      .catch(err => {
+        console.log('Failed to load corpus structure', err)
+      })
+  }, [])
 
   const Searchword = async (e) => {
     // setIsLoading(true)
     // console.log('worddd-->', Word)
     if (Word.length > 0) {
-      navigation('/Sresult', { state: { Word: Word, criteria } })
+      navigation('/Sresult', { state: { Word: Word, dirPath } })
 
     }
     else {
@@ -49,7 +81,7 @@ export default function Searchtool() {
       //   .catch((error) => {
       //     console.log(error);
       //   });
-      navigation('/Concordance', { state: { Word: Word, criteria } })
+      navigation('/Concordance', { state: { Word: Word, dirPath } })
     }
     else {
       alert('You must type a word to search results')
@@ -58,14 +90,14 @@ export default function Searchtool() {
 
   const searchKeywordfreq = async (e) => {
     // setIsLoading(true)
-    navigation('/Keywordf', { state: { criteria } })
+    navigation('/Keywordf', { state: { dirPath } })
   }
 
   const searchKWIC = async (e) => {
     // setIsLoading(true)
     console.log('worddd-->', Word)
     if (Word.length > 0) {
-      navigation('/Kwic', { state: {  Word: Word, criteria } })
+      navigation('/Kwic', { state: {  Word: Word, dirPath } })
     }
     else {
       alert('You must type a word to search results')
@@ -88,18 +120,6 @@ export default function Searchtool() {
                     placeholder="search"
                     className="form-control"
                   />{" "}
-                </div>
-                &nbsp;
-                <div className="col-md-1">
-
-                  <select value={criteria} onChange={(e) => {
-                    // console.log('option--->',e.target.value)
-                    setCriteria(e.target.value)
-                  }} class="form-select">
-                    {categories.map((cat)=>{
-                      return<option value={cat.value}>{cat.text} {"  "}</option>
-                    })}
-                  </select>
                 </div>
               </div>
               <br />
@@ -138,36 +158,27 @@ export default function Searchtool() {
               <br />
 
               <div className="justify-content-center">
-                <div className="container row">
-                  <div className='col-md-4'></div>
-                  {/* <div className="col-md-3">
-                    <label className="d-flex justify-content-center">
-                      <strong>Writer:</strong>
-                    </label>
-                    <select class="form-select form-select-lg-3">
-                      <option value="all">--Writer--</option>{" "}
-                      <option value="fiction">Fiction</option>{" "}
-                      <option value="articles">Articles</option>{" "}
-                    </select>
-                  </div> */}
+                <div className="container row justify-content-center">
                   <div className="col-md-4">
                     <label className=" d-flex justify-content-center">
                       <strong>Category:</strong>
                     </label>
-                    <select value={criteria} onChange={e=>{
-                      e.preventDefault()
-                      setCriteria(e.target.value)
-                    }} class=" form-select form-select-lg-3">
-                      {categories.map((cat)=>{
-                        return <option value={cat.value}>{cat.text} {" "}</option>
-                      })}
-                      {/* <option value="all">--Category--</option>{" "}
-                      <option value="fiction">Fiction</option>{" "}
-                      <option value="news">News Editorials</option>{" "}
-                      <option value="academics">Academics</option>{" "} */}
+                    <select
+                      value={dirPath}
+                      onChange={e => {
+                        e.preventDefault()
+                        setDirPath(e.target.value)
+                      }}
+                      className=" form-select form-select-lg-3"
+                    >
+                      <option value="">All (entire corpus)</option>
+                      {folders.map((folder, idx) => (
+                        <option key={idx} value={folder.value}>
+                          {folder.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                  <div className="col-md-4"></div>
                 </div>
                 <br />
               </div>

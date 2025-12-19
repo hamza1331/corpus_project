@@ -12,6 +12,7 @@ export default function Kwic() {
   // console.log("location", loction);
   const WordSave = loction.state?.Word;
   const criteria = loction.state?.criteria
+  const dirPath = loction.state?.dirPath || ''
   const [page, setpage] = useState(1)
   const [data, setData] = useState([])
   const [showText, setshowText] = useState(false)
@@ -25,7 +26,7 @@ export default function Kwic() {
     if (word !== undefined && word !== null) {
       if (word.length > 0) {
         setshowLoader(true)
-        fetch(`${url}/corpus/findKWIC/${page}`, {
+        fetch(`${url}/corpus-management/search/kwic/${page}`, {
           method: "POST",
           headers: {
             'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ export default function Kwic() {
           },
           body: JSON.stringify({
             word: word,
-            criteria: criteria !== undefined ? criteria : "all"
+            dirPath
           })
         }).then(res => res.json())
           .then((response) => {
@@ -109,10 +110,10 @@ export default function Kwic() {
                     <th scope="row"><a href='#' onClick={e => {
                       e.preventDefault()
                       setshowLoader(true)
-                      fetch(url + '/corpus/getFileText', {
+                      fetch(url + '/corpus-management/file/text', {
                         method: "POST",
                         body: JSON.stringify({
-                          filepath: item.filename
+                          filePath: item.filename
                         }),
                         headers: {
                           'Content-Type': 'application/json',
@@ -126,6 +127,7 @@ export default function Kwic() {
                           if (response.message == 'Success') {
                             setshowText(true)
                             setfileText(response.doc.text)
+                            setfilepath(response.doc.filePath)
                           }
                         }).catch(err => {
                           console.log("Can't get file  ---> ", err)

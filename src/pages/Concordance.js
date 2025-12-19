@@ -14,6 +14,7 @@ export default function Concordance() {
   const wordcounts = loction.state?.rehman?.count;
   const WordSave = loction.state?.Word;
   const criteria = loction.state?.criteria
+  const dirPath = loction.state?.dirPath || ''
 
   const [data,setData] = useState([])
   const [LN, setLN] = useState(6)
@@ -37,7 +38,7 @@ export default function Concordance() {
     // console.log('RN--->',right)
     if (word) {
       setshowLoader(true)
-      fetch(`${url}/corpus/searchConcordance/${page}`, {
+      fetch(`${url}/corpus-management/search/concordance/${page}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ export default function Concordance() {
         },
         body: JSON.stringify({
           word: word,
-          criteria: criteria!==''?criteria:"all",
+          dirPath,
           LN:left,
           RN:right
         })

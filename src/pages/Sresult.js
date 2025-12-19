@@ -25,7 +25,7 @@ export default function Sresult() {
   const loction = useLocation();
   // console.log("location", loction);
   const WordSave = loction.state?.Word;
-  const criteria = loction.state?.criteria
+  const dirPath = loction.state?.dirPath || ''
 
   const [ScreenChange, setScreenChange] = useState(true);
   const [File, setFile] = useState([]);
@@ -38,12 +38,12 @@ export default function Sresult() {
   const [selectedFilename, setselectedFilename] = useState('')
   React.useEffect(() => {
     getCorpusFiles();
-    searchWord(page, WordSave, criteria)
+    searchWord(page, WordSave, dirPath)
   }, []);
-  const searchWord = (page = 1, word = '', criteria = 'all') => {
+  const searchWord = (page = 1, word = '', dirPathVal = '') => {
     if (word.length > 0) {
       setshowLoader(true)
-      fetch(`${url}/corpus/searchWord/${page}`, {
+      fetch(`${url}/corpus-management/search/word/${page}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function Sresult() {
         },
         body: JSON.stringify({
           word: word,
-          criteria
+          dirPath: dirPathVal
         })
       }).then(res => res.json())
         .then((response) => {
@@ -79,17 +79,17 @@ export default function Sresult() {
     }
   }
   const getCorpusFiles = async (e) => {
-    // setIsLoading(true)
-    // console.log('criteria--->',criteria)
-    fetch(`${url}/corpus/corpusFiles/${criteria !== undefined ? criteria : "all"}`)
+    const params = new URLSearchParams()
+    if (dirPath) {
+      params.append('dirPath', dirPath)
+    }
+    fetch(`${url}/corpus-management/directory/contents?${params.toString()}`)
       .then((res) => res.json())
       .then((response) => {
         console.log("Files received search word --->", response);
-        // after
-        if (response.message === "Success") {
-          // setIsLoading(false
-          setFile(response.doc);
-          // setData(response.doc);
+        if (response.message === "Success" && response.doc && Array.isArray(response.doc.contents)) {
+          const onlyFiles = response.doc.contents.filter(item => item.type === 'file')
+          setFile(onlyFiles);
         }
       })
       .catch((error) => {
@@ -113,12 +113,35 @@ export default function Sresult() {
                       return (
                         <tr
                           onClick={() => {
-                            SetData(item);
+                            // Load file text when a file is selected
+                            SetData({});
+                            setshowLoader(true)
+                            fetch(`${url}/corpus-management/file/text`, {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                filePath: item.path
+                              })
+                            })
+                              .then(res => res.json())
+                              .then(response => {
+                                setshowLoader(false)
+                                if (response.message === 'Success') {
+                                  SetData(response.doc);
+                                }
+                              })
+                              .catch(err => {
+                                setshowLoader(false)
+                                console.log('Cannot load file text', err)
+                              })
                             setScreenChange(false);
-                            setselectedFilename(item.fileName)
+                            setselectedFilename(item.name)
                           }}
                         >
-                          <td>{item.fileName}</td>
+                          <td>{item.name}</td>
                         </tr>
                       );
                     })}
@@ -138,7 +161,7 @@ export default function Sresult() {
                   onChange={(e, value) => {
                     setpage(value)
                     setshowLoader(true)
-                    searchWord(value, WordSave, criteria)
+                    searchWord(value, WordSave, dirPath)
                     // loadData(WordSave, value)
                     // load(WordSave)
                   }} />
