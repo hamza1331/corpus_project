@@ -15,6 +15,8 @@ export default function Home() {
     const [showFilesTable, setshowFilesTable] = useState(false)
     const [selectedCategory, setselectedCategory] = useState('')
     const [showLoader, setshowLoader] = useState(false)
+    const [corpusStats, setCorpusStats] = useState(null)
+    const [corpusStatsLoading, setCorpusStatsLoading] = useState(true)
     const [showCat2, setShowCat2] = useState(false)
     const [categories2, setcategories2] = useState([])
     const [cat2Index,setCat2index] = useState(-1)
@@ -38,6 +40,27 @@ export default function Home() {
                 }
             })
     }, [])
+
+    useEffect(() => {
+        setCorpusStatsLoading(true)
+        fetch(url + '/api/corpus-stats')
+            .then(res => res.json())
+            .then(response => {
+                setCorpusStatsLoading(false)
+                if (response.message === 'Success' && response.doc) {
+                    setCorpusStats(response.doc)
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load corpus stats', err)
+                setCorpusStatsLoading(false)
+            })
+    }, [])
+
+    const formatNumber = (n) => {
+        if (n === null || n === undefined) return ''
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
 
     useEffect(() => {
         // Load corpus directory tree and flatten to folders for homepage dynamic list
@@ -126,7 +149,20 @@ export default function Home() {
                     <div className="col-md-6 col-sm-6 p-5">
                         <div className="pt-3 border border-2 p-2 border-success pb-3">
                             <h6 className="p-3">
-                            PakLocCorp represents corpus of Pakistani English and this corpus is a collection of text from multiple genres and registers. There are currently 1184 files in total and 14,616,077 words. These collections are a window to the variations of English. It contains words from magazines, newspapers, fiction, academic texts and research publications. This corpus is expanding and open to contribution. Researchers, academicians, scholars and policy makers may use this corpus. Moreover, you may also contribute relevant data. Data will be added after scrutiny by the team PakLocCorp.
+                            PakLocCorp represents corpus of Pakistani English and this corpus is a collection of text from multiple genres and registers. There are currently {corpusStatsLoading ? (
+                                        <span style={{display:'inline-block', verticalAlign:'middle'}}>
+                                            <ColorRing
+                                                visible={true}
+                                                height="18"
+                                                width="18"
+                                                ariaLabel="loading"
+                                                wrapperStyle={{ display: 'inline-block', marginLeft: 6, marginRight: 6 }}
+                                                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+                                            />
+                                        </span>
+                                    ) : (
+                                        `${formatNumber(corpusStats && corpusStats.files ? corpusStats.files : 0)} files in total and ${formatNumber(corpusStats && corpusStats.words ? corpusStats.words : 0)} words.`
+                                    )} These collections are a window to the variations of English. It contains words from magazines, newspapers, fiction, academic texts and research publications. This corpus is expanding and open to contribution. Researchers, academicians, scholars and policy makers may use this corpus. Moreover, you may also contribute relevant data. Data will be added after scrutiny by the team PakLocCorp.
  <br />
                                 This non-commercial research project is freely available for academic purposes. By downloading it, or using it online, you agree with the <span><Link to='/Terms'>Term and Conditions</Link></span>. User guide and tutorials are also available. This specialized corpus offers Urduized word list along with source reference for advance research and it is expanding. Scholars are also encouraged for contributions in the form of small or large corpus of local indigenous variety of English.
                             </h6>
