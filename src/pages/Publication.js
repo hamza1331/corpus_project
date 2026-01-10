@@ -3,11 +3,14 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Bar from "../components/Bar";
 import { url } from "../components/Variable";
+import { supabase } from "../supabaseClient";
 import Copyright from "../components/Copyright";
 
 export default function Publication() {
   const [data, setdata] = useState([]);
   const [isLoggedIn, setIsloggedIn] = useState(false);
+  const [sections, setSections] = useState([]);
+  const [isLoadingSections, setIsLoadingSections] = useState(false);
 
   const toTitleCase = (str) => {
     return str.replace(/\w\S*/g, function (txt) {
@@ -20,13 +23,33 @@ export default function Publication() {
     if (data !== null) {
       setIsloggedIn(true);
     }
-    fetch(url + "/corpus/downloadCorpus")
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.message === "Success") {
-          // setdata(response.doc)
+    // Fetch publication sections and their publications from Supabase
+    const fetchSections = async () => {
+      setIsLoadingSections(true);
+      try {
+        const { data, error } = await supabase
+          .from('publication_sections')
+          .select('*, publications(*)')
+          .order('order', { ascending: true });
+
+        if (error) {
+          console.error('Supabase fetch error:', error);
+        } else if (data) {
+          // Ensure publications are sorted by their order field
+          const normalized = data.map((sec) => ({
+            ...sec,
+            publications: (sec.publications || []).sort((a, b) => (a.order || 0) - (b.order || 0)),
+          }));
+          setSections(normalized);
         }
-      });
+      } catch (e) {
+        console.error('Error fetching sections', e);
+      } finally {
+        setIsLoadingSections(false);
+      }
+    };
+
+    fetchSections();
   }, []);
 
   const downloadFile = (e) => {
@@ -36,6 +59,31 @@ export default function Publication() {
         "_blank"
       );
     }
+  };
+
+  const renderSection = (section) => {
+    const items = section.publications || [];
+
+    // For other sections render an ordered list of citation strings
+    return (
+      <div className="table-responsive">
+        <ol>
+          {items.map((it, idx) => (
+            <li key={it.id || idx} className="mb-3">
+              {it.content || it.title}
+              {it.url && (
+                <span>
+                  {' '}
+                  <a href={it.url} target="_blank" rel="noreferrer">
+                    [link]
+                  </a>
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
   };
 
   return (
@@ -64,196 +112,18 @@ export default function Publication() {
                 </p>
 
                 <br />
-                <h4>For Citation</h4>
-                <p>
-                  Zahra, F., Zahra, T., & Abbas, A. (2022, June 15). PakLocCorp.
-                  Retrieved July 8, 2022, from https://pakloccorp.com/
-                </p>
-
-                <br />
-
-                {/* ✅ NEW STRUCTURE STARTS HERE */}
-                <h4>Journal Publications</h4>
-                <div className="table-responsive">
-                  <ol>
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2023). Neoliberal
-                      Co-option of English: A Study of Urduized Terms in
-                      Pakistani Magazine Articles through Corpus Approaches.
-                      Rivista Italiana di Paleontologia e Stratigrafia. RIFL,
-                      17(2), 174-188.
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2023). Corpus Assisted
-                      Discourse Analysis of Urduized Words and Selected
-                      Collocation patterns: A case Study of Trespassing by Uzma
-                      Aslam Khan. Research Journal of Language and Literary
-                      Studies, 3(2), 125-144.
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2024). Globalization of
-                      Narratives for Clothing and Appearance: Corpus-Assisted
-                      Analysis of Intercultural Communication. Migration
-                      Letters, 21(13), 532–551.
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F. T., Zahra, T., & Gee, J. P. (n.d.). Political
-                      metaphor or social language: Discourse analysis of ‘lota’
-                      in PakLocCorpus [submitted manuscript].
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F. T., Zahra, T., & Abbas, A. (in press/accepted,
-                      expected 2026). Developing an online specialized corpus of
-                      Pakistani English. Corpora, 21(3). (Forthcoming)
-                    </li>
-                  </ol>
-                </div>
-
-                <br />
-                <h4>Conference Papers</h4>
-                <div className="table-responsive">
-                  <ol>
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2022, October 18–20).
-                      Developing a Corpus of Non-native English and Annotating
-                      Indigenous Lexical Items [Paper presentation]. 1st
-                      International Conference on Linguistics and Multidisciplinary
-                      Research: Exploring Challenges and Expanding Horizons, ICLMR,
-                      The Women University, Multan.
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2023, November 21–22).
-                      Teaching stylistic analysis of English prose fiction
-                      through Corpus approaches [Paper presentation].
-                      Digitization of teaching and learning English. TechHighEd-II,
-                      Air University, Islamabad.
-                    </li>
-                    <br />
-
-                    <li>
-                      Zahra, F., Zahra, T., & Abbas, A. (2024, February 26–28).
-                      Investigating writing ability of non-native learners: A
-                      pedagogical experimental study [Paper presentation].
-                      Kinnaird’s 4th international conference on social science
-                      and humanities, Lahore.
-                    </li>
-                  </ol>
-                </div>
-                {/* ✅ NEW STRUCTURE ENDS HERE */}
-
-                <br />
-                <h4>Related Publications</h4>
-                <p>
-                  Reference to works using PakEng for research purposes can be
-                  found through the links provided here.
-                </p>
-                <br />
-
-                <div className="table-responsive">
-                  <ol>
-                    <li>
-                      Tariq Rehman (1990){" "}
-                      <a
-                        href="https://www.researchgate.net/publication/272269971_Pakistani_English"
-                        target="__blank"
-                        rel="noreferrer"
-                      >
-                        Pakistani English
-                      </a>
-                      ; First published by the National Institute of Pakistan
-                      Studies, Quaid-iAzam University, Islamabad, 1990.
-                    </li>
-                    <br />
-
-                    <li>
-                      Ijaz Ali Khan, Ibad Ullah Dr. Muhammad Yousaf Syed Sajjad
-                      Ali (eds.) (2019){" "}
-                      <a href="https://discourse.org.pk/index.php/discourse/article/view/131" target="_blank" rel="noreferrer">
-                        Extraction and Analysis of Urduized English Words From BBC Urdu Newspaper, Pakistan
-                      </a>{" "}
-                      Vol. 5 No. 2 (2019) The Discourse.
-                    </li>
-                    <br />
-
-                    <li>
-                      Mahmood, Mr. Rashid (2009){" "}
-                      <a
-                        href="http://prr.hec.gov.pk/jspui/handle/123456789/1961"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        A Lexico-grammatical Study of Noun Phrase in Pakistani English
-                      </a>{" "}
-                      Bahauddin Zakariya University, Multan..
-                    </li>
-                    <br />
-
-                    <li>
-                      Humaira Irfan Khan (2012){" "}
-                      <a
-                        href="http://www.journals.aiac.org.au/index.php/IJALEL/article/view/747"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        The Evolution of Pakistani English (PakE) as a Legitimate Variety of English;
-                      </a>{" "}
-                      Vol. 1 No. 5; September 2012 International Journal of
-                      Applied Linguistics & English Literature.
-                    </li>
-                    <br />
-
-                    <li>
-                      Dr. Mubina Talaat (2002){" "}
-                      <a
-                        href="https://www.semanticscholar.org/paper/THE-FORM-AND-FUNCTIONS-OF-ENGLISH-IN-PAKISTAN-Talaat/65f8e498d015fed2954413e71b8554684068c6e7"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        THE FORM AND FUNCTIONS OF ENGLISH IN PAKISTAN;
-                      </a>{" "}
-                      Linguistics.
-                    </li>
-                    <br />
-
-                    <li>
-                      Dr. Mubina Talaat (2003){" "}
-                      <a
-                        href="https://jorurdu.bzu.edu.pk/website/journal/article/5e84d6ec8e776/page"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Pakistani English: A Socialinguistic Variety
-                      </a>{" "}
-                      Journal of Research (Urdu), Vol # 4, Issue # 1.
-                    </li>
-                    <br />
-
-                    <li>
-                      M Hamza, Rooman Khan, A. M Abbasi (2017){" "}
-                      <a
-                        href="https://web.p.ebscohost.com/abstract?direct=true&profile=ehost&scope=site&authtype=crawler&jrnl=19302940&AN=123784286&h=262QffhNfHuePcrN7x6jlnXNNiTP%2fvjV%2f8uaObWHUopqE5GoXvkYXs2U7nG5UZg8m%2bRhW%2bYQ3Tb%2fgkjnPOvdfw%3d%3d&crl=c&resultNs=AdminWebAuth&resultLocal=ErrCrlNotAuth&crlhashurl=login.aspx%3fdirect%3dtrue%26profile%3dehost%26scope%3dsite%26authtype%3dcrawler%26jrnl%3d19302940%26AN%3d123784286"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Error Analysis of English Paragraphs by Pakistani Undergraduates;
-                      </a>
-                      <br />
-                      Language in India. Jun2017, Vol. 17 Issue 6, p482-496.
-                    </li>
-                  </ol>
-                  <br />
-                </div>
-
+                {isLoadingSections ? (
+                  <p>Loading publications...</p>
+                ) : (
+                  sections.map((section) => (
+                    <div key={section.id} className="mb-5">
+                      <h4>
+                        <strong>{toTitleCase(section.name)}</strong>
+                      </h4>
+                      {renderSection(section)}
+                    </div>
+                  ))
+                )}
                 <Copyright />
               </div>
             </div>
