@@ -18,7 +18,7 @@ export default function Bar() {
         <Container>
           <Navbar.Brand className="brand">
           <Nav.Link href="/"> <img
-              src="https://firebasestorage.googleapis.com/v0/b/ituiniwebsite.appspot.com/o/pakloc-removebg-preview.png?alt=media&token=ef9ea523-157d-43d4-a6aa-d3806495606a"
+              src="https://dgizmja0jyjhvet0.public.blob.vercel-storage.com/logo/pakloccorpcopy.png"
               alt="logo"
               width="120"
             /></Nav.Link>
